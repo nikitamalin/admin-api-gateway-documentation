@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../theme/styles";
-
+import { Analytics } from "@vercel/analytics/react";
 import Head from "next/head";
 export default function App({
   Component,
@@ -38,6 +38,7 @@ export default function App({
           />
           <meta property="og:image" content="/cariq_logo.png" />
         </Head>
+        <Analytics />
         <Component {...pageProps} />
       </ChakraProvider>
     </SessionProvider>
