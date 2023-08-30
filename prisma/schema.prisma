@@ -56,6 +56,6 @@ model VerificationToken {
 model standings {
   id        BigInt @id @default(autoincrement())
   driver    String @default("")
-  fan_votes BigInt @default(0)
+  fan_votes Int
   image     String @default("")
 }

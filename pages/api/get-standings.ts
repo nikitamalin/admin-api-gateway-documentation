@@ -17,13 +17,15 @@ export default async function handler(
         image: true
       }
     });
+    prisma.$disconnect();
+    result = result.sort((a: any, b: any) => b.fan_votes - a.fan_votes);
     let deserializeResult = result.map((obj: any) => {
       obj.fan_votes = obj.fan_votes.toString();
       return obj;
     });
+
     res.status(200).json(deserializeResult);
   } catch (err) {
-    console.log("ERR: ", err);
     res.status(500).json({ message: "Internal server error" });
   }
   return;
