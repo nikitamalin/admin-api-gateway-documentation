@@ -45,10 +45,11 @@ export default function Home() {
   const [city, setCity] = useState<string>("");
 
   const [firstPass, setFirstPass] = useState<boolean>(true);
+  const [idToken, setIdToken] = useState<string>("");
 
   const labelStyles = "mt-4 text-xl";
   const inputStyles =
-    "mt-1 mr-1 border border-gray rounded-md py-1 px-3 text-2xl outline-blue";
+    "mt-1 mr-1 border border-gray rounded-md py-1 px-3 text-2xl outline-blue cursor-text";
 
   const standingsURL = `/api/get-standings`;
   const { data: standings } = useSwr(standingsURL, async () => {
@@ -62,6 +63,9 @@ export default function Home() {
         if (session.user.email) {
           setEmail(session.user.email);
         }
+        if (session.idToken) {
+          setIdToken(session.idToken);
+        }
       }
     };
 
@@ -69,8 +73,8 @@ export default function Home() {
   }, [session]);
 
   let profileURL = "";
-  if (email) {
-    profileURL = `/api/profile/get-profile?email=${email}`;
+  if (email && idToken) {
+    profileURL = `/api/profile/get-profile?email=${email}&idToken=${idToken}`;
   }
 
   const { data: profile } = useSwr(profileURL, async () => {
@@ -119,10 +123,12 @@ export default function Home() {
   }
 
   const createToast = (response: any) => {
-    if (response.ok) {
+    if (response.ok || true) {
       toast({
         position: "top-right",
-        render: () => <div className="bg-blue p-3 rounded-lg">Note Created</div>
+        render: () => (
+          <div className="bg-blue p-3 rounded-lg">{response.message}</div>
+        )
       });
     }
   };
@@ -139,15 +145,13 @@ export default function Home() {
         phoneNumber: phoneNumber,
         gender: gender,
         age: age,
-        city: city
+        city: city,
+        idToken: idToken
       })
     });
     const res = await response.json();
-
     createToast(res);
-
     setIsVoteLoading(false);
-
     return await res;
   }
 
@@ -162,18 +166,21 @@ export default function Home() {
         phoneNumber: phoneNumber,
         gender: gender,
         age: age,
-        city: city
+        city: city,
+        idToken: idToken
       })
     });
     const res = await response.json();
-
+    if (res.message !== "Success") {
+      createToast(res);
+    }
     setIsProfileLoading(false);
 
     return await res;
   }
 
   if (firstPass && email && profile && !("message" in profile)) {
-    setName(profile.full_name);
+    setName(profile.name);
     setPhoneNumber(profile.phone_number);
     setGender(profile.gender);
     setAge(profile.age);
@@ -199,7 +206,7 @@ export default function Home() {
               Profile
             </button>
             <button
-              className={`border p-2 rounded-r-xl ${
+              className={`border p-2 rounded-r-xl cursor-pointer ${
                 !isProfile && "bg-white border-orange"
               }`}
               onClick={() => {
@@ -263,9 +270,6 @@ export default function Home() {
               <motion.button
                 type="submit"
                 value="Send"
-                className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                  isProfileLoading ? "opacity-0 pointer-events-none" : ""
-                }`}
                 whileHover={{
                   scale: 1.04,
                   transition: { duration: 0.1 }
@@ -274,6 +278,9 @@ export default function Home() {
                   scale: 0.98,
                   transition: { duration: 0.1 }
                 }}
+                className={`flex bg-orange text-white rounded-full cursor-pointer transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
+                  isProfileLoading ? "opacity-0 pointer-events-none" : ""
+                }`}
               >
                 Save
               </motion.button>
@@ -308,7 +315,7 @@ export default function Home() {
                         return (
                           <Tr
                             key={index}
-                            className={`text-3xl  hover:cursor-pointer ${
+                            className={`text-3xl hover:cursor-pointer ${
                               vote === index + 1
                                 ? "bg-orangeComp"
                                 : "hover:bg-light"
@@ -346,7 +353,6 @@ export default function Home() {
             <div className="relative items-center mx-auto text-2xl mt-8 ">
               <motion.button
                 type="submit"
-                value="Send"
                 className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
                   isVoteLoading ? "opacity-0 pointer-events-none" : ""
                 }`}

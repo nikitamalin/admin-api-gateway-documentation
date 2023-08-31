@@ -24,7 +24,7 @@ export default function Navbar({ children }: Props) {
               <Image
                 src="/cariq.png"
                 width="100"
-                height="100"
+                height="32"
                 alt="CarIQ"
               ></Image>
             </Link>

@@ -9,7 +9,8 @@ const schema = z.object({
   phoneNumber: z.string(),
   gender: z.string(),
   age: z.string(),
-  city: z.string()
+  city: z.string(),
+  idToken: z.string()
 });
 
 export default async function handler(
@@ -40,9 +41,12 @@ export default async function handler(
       res.status(403).json({ message: "Phone Number format is invalid" });
       return;
     }
-    const result = await prisma.user.findMany({
+    const result = await prisma.userInfo.findMany({
       where: {
-        phone_number: phoneNumber
+        phone_number: phoneNumber,
+        NOT: {
+          email: email
+        }
       }
     });
 
@@ -51,20 +55,21 @@ export default async function handler(
       return;
     }
 
-    await prisma.user.update({
+    await prisma.userInfo.update({
       where: {
         email: email
       },
       data: {
-        full_name: name,
+        name: name,
         phone_number: phoneNumber,
         gender: gender,
         age: age,
-        city: city
+        city: city,
+        profile_complete: true
       }
     });
 
-    res.status(200).json({ message: "success" });
+    res.status(200).json({ message: "Success" });
   } catch (err) {
     if (err instanceof ZodError) {
       res.status(400).json({ message: "Invalid request" });

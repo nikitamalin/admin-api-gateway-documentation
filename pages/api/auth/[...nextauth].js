@@ -3,9 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import Auth0Provider from "next-auth/providers/auth0";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/client";
-
+import { Prisma } from "@prisma/client";
 export default NextAuth({
-  adapter: PrismaAdapter(prisma),
   providers: [
     Auth0Provider({
       clientId: process.env.AUTH0_CLIENT_ID,
@@ -16,15 +15,30 @@ export default NextAuth({
   callbacks: {
     async signIn({ user, profile }) {
       if (user && user.email && profile && profile.name) {
-        await prisma.user.update({
-          where: {
-            email: user.email
-          },
-          data: {
-            full_name: profile.name
+        try {
+          await prisma.userInfo.create({
+            data: {
+              email: user.email,
+              name: profile.name
+            }
+          });
+        } catch (err) {
+          if (!err instanceof Prisma.PrismaClientKnownRequestError) {
+            console.error("Internal Server Error:", err.message);
           }
-        });
+        }
       }
+      return true;
+    },
+    async session({ session, token, user }) {
+      session.idToken = token.idToken;
+      return session;
+    },
+    async jwt({ token, user, account }) {
+      if (account) {
+        token.idToken = account.id_token;
+      }
+      return token;
     }
   },
   /*pages: {

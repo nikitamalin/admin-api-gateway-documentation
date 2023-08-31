@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
 
+import { isValidToken } from "@/utils/auth";
+import { isEmailValid, isWeekendPST } from "@/utils/validation";
+
 const schema = z.object({
   email: z.string().email(),
   driver: z.string(),
@@ -9,25 +12,15 @@ const schema = z.object({
   phoneNumber: z.string(),
   gender: z.string(),
   age: z.string(),
-  city: z.string()
+  city: z.string(),
+  idToken: z.string()
 });
-
-function isWeekendPST() {
-  const now = new Date();
-  const utcTime = now.getTime() + now.getTimezoneOffset() * 60000;
-  const pstOffset = -8 * 60;
-
-  const pstTime = new Date(utcTime + pstOffset * 60000);
-  const dayOfWeek = pstTime.getDay();
-
-  return dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
-}
 
 async function createVote(
   res: NextApiResponse,
   email: string,
   driver: string,
-  isValid = true
+  isValid = false
 ) {
   try {
     let result = await prisma.voteLog.create({
@@ -61,12 +54,20 @@ export default async function handler(
     const city = event.city;
 
     /* 
-    Quick check:
+    Validation check:
+      - Selected a driver
       - It's the weekend
-      - is a User(ensure not created by a query outside of this app)
-      - Phone number is valid (possibly check unique in future)
+      - Validate jwt
+      - is a User -> has to sign in
+      - Is user's profile complete?
       - Hasn't voted today
+      - email not in blacklisted email list
     */
+
+    if (!driver) {
+      res.status(403).json({ message: "Please select a driver" });
+      return;
+    }
 
     if (!isWeekendPST) {
       res.status(403).json({
@@ -74,43 +75,45 @@ export default async function handler(
       });
       return;
     }
-    let isUser = await prisma.user.findUnique({
+
+    if (!isValidToken(event.idToken, email)) {
+      createVote(res, email, driver);
+      res.status(200).json({ message: "Success" });
+      return;
+    }
+
+    let user = await prisma.userInfo.findUnique({
       where: {
         email: email
       },
       select: {
-        id: true
+        profile_complete: true
       }
     });
 
-    if (!isUser) {
-      // have to be signed in to vote -> falsely leading them to success
-      createVote(res, email, driver, false);
-      res.status(403).json({
+    if (!user) {
+      createVote(res, email, driver);
+      res.status(200).json({
         message: "Success"
       });
       return;
     }
+
+    if (!user.profile_complete) {
+      res.status(403).json({ message: "Please complete your profile" });
+      return;
+    }
+
     const today = new Date();
     let votedToday = await prisma.voteLog.findMany({
       where: {
-        OR: [
-          {
-            email: email,
-            created_at: {
-              gte: today
-            }
-          },
-          {
-            phone_number: phoneNumber,
-            created_at: {
-              gte: today
-            }
-          }
-        ]
+        email: email,
+        created_at: {
+          gte: today
+        }
       }
     });
-    console.log("v: ", votedToday);
+
     if (votedToday.length !== 0) {
       res.status(403).json({
         message: "You have already voted today."
@@ -118,29 +121,12 @@ export default async function handler(
       return;
     }
 
-    await prisma.standings.update({
-      where: {
-        driver: driver
-      },
-      data: {
-        fan_votes: {
-          increment: 1
-        }
-      }
-    });
-    createVote(res, email, driver, false);
-    console.log("UPDATED");
-
-    // perform some real validation before real vote
-    let isValid = true;
-    if (email.endsWith("onlyfans.com") || email.includes("onlyfans")) {
-      isValid = false;
+    if (isEmailValid(email)) {
+      createVote(res, email, driver);
+      res.status(200).json({ message: "Success" });
+      return;
     }
-
-    if (emailInList(email)) {
-      isValid = false;
-    }
-
+    createVote(res, email, driver, true);
     res.status(200).json({ message: "Success" });
   } catch (error) {
     if (error instanceof ZodError) {
@@ -150,13 +136,4 @@ export default async function handler(
     }
   }
   return;
-}
-
-function emailInList(email: string) {
-  let emailList = ["bigballs@aol.com"];
-
-  if (email in emailList) {
-    return true;
-  }
-  return false;
 }

@@ -1,9 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
-
+import { isValidToken } from "@/utils/auth";
 const schema = z.object({
-  email: z.string().email()
+  email: z.string().email(),
+  idToken: z.string()
 });
 
 export default async function handler(
@@ -16,13 +17,20 @@ export default async function handler(
   }
 
   try {
-    const email = schema.parse(req.query).email;
-    const result = await prisma.user.findMany({
+    const event = schema.parse(req.query);
+    const email = event.email;
+
+    if (!isValidToken(event.idToken, email)) {
+      res.status(200).json({ message: "Success" });
+      return;
+    }
+
+    const result = await prisma.userInfo.findMany({
       where: {
         email: email
       },
       select: {
-        full_name: true,
+        name: true,
         phone_number: true,
         gender: true,
         age: true,
@@ -31,7 +39,6 @@ export default async function handler(
     });
     res.status(200).json(result[0]);
   } catch (err) {
-    console.log(err);
     if (err instanceof ZodError) {
       res.status(400).json({ message: "Invalid request" });
     } else {
