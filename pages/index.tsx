@@ -207,7 +207,7 @@ export default function Home() {
     }
     setFirstPass(false);
   }
-  return <DriversSkeleton />;
+
   if (status === "authenticated") {
     return (
       <main
