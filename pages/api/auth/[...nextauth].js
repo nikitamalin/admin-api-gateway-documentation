@@ -13,6 +13,20 @@ export default NextAuth({
       issuer: process.env.AUTH0_ISSUER_BASE_URL
     })
   ],
+  callbacks: {
+    async signIn({ user, profile }) {
+      if (user && user.email && profile && profile.name) {
+        await prisma.user.update({
+          where: {
+            email: user.email
+          },
+          data: {
+            full_name: profile.name
+          }
+        });
+      }
+    }
+  },
   /*pages: {
       //   error: '/auth/error',
     },*/

@@ -4,20 +4,23 @@ const config: Config = {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-      },
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
+      }
     },
     colors: {
-      blue: "#0076ff",
+      blue: "#219EF4",
       //blue: '#1fb6ff',
       blueHover: "#3391ff",
+      orange: "#F47721",
+      orangeHover: "#D75E0B",
+      orangeComp: "#219EF4",
       green: "#13ce66",
       gray: "#8492a6",
       white: "#ffffff",
@@ -26,7 +29,7 @@ const config: Config = {
       transparent: "transparent",
       light: "#f9f9f9 ", //grey
       lightHover: "#e0e0e0",
-      analogueBlue: "#0900ff",
+      analogueBlue: "#0900ff"
     },
     fontFamily: {
       sans: ["sans-serif", "sans-serif"],
@@ -36,7 +39,7 @@ const config: Config = {
       poppins: ["var(--font-poppins)", "sans-serif"],
       lexend: ["var(--font-lexend)", "sans-serif"],
       arial: ["Arial", "sans-serif"],
-      helvetica: ["Helvetica", "sans-serif"],
+      helvetica: ["Helvetica", "sans-serif"]
     },
     screens: {
       footerXM: "402px",
@@ -52,9 +55,9 @@ const config: Config = {
       xl: "1280px",
       mycommunity: "1520px",
       mycommunityGrid: "1550px",
-      xxl: "1600px",
-    },
+      xxl: "1600px"
+    }
   },
-  plugins: [],
+  plugins: []
 };
 export default config;

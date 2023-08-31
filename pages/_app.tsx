@@ -5,6 +5,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "../theme/styles";
 import { Analytics } from "@vercel/analytics/react";
 import Head from "next/head";
+import Navbar from "@/components/Navbar";
 export default function App({
   Component,
   pageProps: { session, ...pageProps }
@@ -39,6 +40,7 @@ export default function App({
           <meta property="og:image" content="/cariq_logo.png" />
         </Head>
         <Analytics />
+        <Navbar />
         <Component {...pageProps} />
       </ChakraProvider>
     </SessionProvider>
