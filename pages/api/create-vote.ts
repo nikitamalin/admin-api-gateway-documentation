@@ -3,7 +3,12 @@ import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
 
 import { isValidToken } from "@/utils/auth";
-import { isEmailValid, isWeekendPST } from "@/utils/validation";
+import {
+  isEmailValid,
+  isWeekendPST,
+  dstOffset,
+  getCaliforniaTime
+} from "@/utils/validation";
 
 const schema = z.object({
   email: z.string().email(),
@@ -12,7 +17,6 @@ const schema = z.object({
   phoneNumber: z.string(),
   gender: z.string(),
   age: z.string(),
-  city: z.string(),
   idToken: z.string()
 });
 
@@ -31,7 +35,9 @@ async function createVote(
       }
     });
   } catch (err) {
+    console.log(err);
     res.status(500).json({ message: "Internal server error" });
+    return;
   }
 }
 
@@ -51,8 +57,6 @@ export default async function handler(
     const phoneNumber = event.phoneNumber;
     const gender = event.gender;
     const age = event.age;
-    const city = event.city;
-
     /* 
     Validation check:
       - Selected a driver
@@ -69,9 +73,9 @@ export default async function handler(
       return;
     }
 
-    if (!isWeekendPST) {
+    if (!isWeekendPST() && false) {
       res.status(403).json({
-        message: "Voting is only allowed during the weekend PST Time"
+        message: "Voting is only allowed during the weekend California Time"
       });
       return;
     }
@@ -104,24 +108,34 @@ export default async function handler(
       return;
     }
 
-    const today = new Date();
+    const time = new Date();
+    time.setHours(0, 0, 0, 0);
+    new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     let votedToday = await prisma.voteLog.findMany({
       where: {
         email: email,
         created_at: {
-          gte: today
+          gte: time
         }
       }
     });
 
     if (votedToday.length !== 0) {
+      let dayOfWeek = getCaliforniaTime().getDay();
+      if (dayOfWeek === 5 || dayOfWeek === 6) {
+        res.status(403).json({
+          message:
+            "You have already voted today. Please check back in tomorrow."
+        });
+        return;
+      }
       res.status(403).json({
         message: "You have already voted today."
       });
       return;
     }
 
-    if (isEmailValid(email)) {
+    if (!isEmailValid(email)) {
       createVote(res, email, driver);
       res.status(200).json({ message: "Success" });
       return;
@@ -129,6 +143,7 @@ export default async function handler(
     createVote(res, email, driver, true);
     res.status(200).json({ message: "Success" });
   } catch (error) {
+    console.log(error);
     if (error instanceof ZodError) {
       res.status(400).json({ message: "Invalid request" });
     } else {

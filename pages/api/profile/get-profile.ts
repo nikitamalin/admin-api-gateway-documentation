@@ -33,8 +33,7 @@ export default async function handler(
         name: true,
         phone_number: true,
         gender: true,
-        age: true,
-        city: true
+        age: true
       }
     });
     res.status(200).json(result[0]);

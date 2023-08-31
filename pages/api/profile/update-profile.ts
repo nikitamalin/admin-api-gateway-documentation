@@ -9,7 +9,6 @@ const schema = z.object({
   phoneNumber: z.string(),
   gender: z.string(),
   age: z.string(),
-  city: z.string(),
   idToken: z.string()
 });
 
@@ -29,7 +28,6 @@ export default async function handler(
     const phoneNumber = event.phoneNumber;
     const gender = event.gender;
     const age = event.age;
-    const city = event.city;
     /*
     Validation:
         - Phone validation
@@ -64,7 +62,6 @@ export default async function handler(
         phone_number: phoneNumber,
         gender: gender,
         age: age,
-        city: city,
         profile_complete: true
       }
     });

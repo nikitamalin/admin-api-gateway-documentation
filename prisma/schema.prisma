@@ -10,22 +10,24 @@ datasource db {
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model standings {
-  id           BigInt @id @default(autoincrement())
-  driver       String @unique @default("")
+  id           BigInt    @id @default(autoincrement())
+  driver       String    @unique @default("")
   fan_votes    Int
-  image        String @default("")
-  actual_votes Int    @default(0)
+  image        String    @default("")
+  actual_votes Int       @default(0)
+  voteLog      voteLog[]
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
 model voteLog {
-  id           BigInt   @id(map: "vote_log_pkey") @default(autoincrement())
-  created_at   DateTime @default(now()) @db.Timestamptz(6)
+  id           BigInt    @id(map: "vote_log_pkey") @default(autoincrement())
+  created_at   DateTime  @default(now()) @db.Timestamptz(6)
   email        String
-  driver_vote  String   @unique(map: "vote_log_driver_vote_key")
-  is_valid     Boolean  @default(true)
-  phone_number String   @default("")
-  User         userInfo @relation(fields: [email], references: [email], onDelete: NoAction, onUpdate: NoAction)
+  driver_vote  String
+  is_valid     Boolean   @default(true)
+  phone_number String    @default("")
+  standings    standings @relation(fields: [driver_vote], references: [driver], onDelete: NoAction, onUpdate: NoAction)
+  User         userInfo  @relation(fields: [email], references: [email], onDelete: NoAction, onUpdate: NoAction)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
@@ -37,7 +39,6 @@ model userInfo {
   phone_number     String?   @default("")
   gender           String?   @default("")
   age              String?   @default("")
-  city             String?   @default("")
   profile_complete Boolean   @default(false)
   voteLog          voteLog[]
 }
