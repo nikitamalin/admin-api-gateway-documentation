@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Inter, Noto_Sans_Gunjala_Gondi } from "next/font/google";
+import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +35,7 @@ import {
 import { motion } from "framer-motion";
 import { useProfileContext } from "@/components/Context/ProfileContext";
 import Confetti from "@/components/Confetti";
+import DriversSkeleton from "@/components/Skeletons/Drivers";
 
 export default function Home() {
   const { data: session, status } = useSession();
@@ -206,7 +207,7 @@ export default function Home() {
     }
     setFirstPass(false);
   }
-
+  return <DriversSkeleton />;
   if (status === "authenticated") {
     return (
       <main
@@ -300,13 +301,13 @@ export default function Home() {
           </ModalContent>
         </Modal>
 
-        <form
-          id="form"
-          className="flex flex-col base:w-[95%] footerXM:w-[90%] md:w-[700px] bg-white py-8 px-12 rounded-lg shadow-lg"
-          onSubmit={handleVote}
-        >
-          <div>
-            {standings && (
+        {standings ? (
+          <form
+            id="form"
+            className="flex flex-col base:w-[95%] footerXM:w-[90%] md:w-[700px] bg-white py-8 px-12 rounded-lg shadow-lg"
+            onSubmit={handleVote}
+          >
+            <div>
               <TableContainer className="bg-white rounded-lg mt-8">
                 <Table variant="simple">
                   <Thead>
@@ -354,33 +355,35 @@ export default function Home() {
                   </Tbody>
                 </Table>
               </TableContainer>
-            )}
-          </div>
-          {isVisible && <Confetti />}
-          <div className="relative items-center mx-auto text-2xl mt-8 ">
-            <motion.button
-              type="submit"
-              className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                isVoteLoading ? "opacity-0 pointer-events-none" : ""
-              }`}
-              whileHover={{
-                scale: 1.04,
-                transition: { duration: 0.1 }
-              }}
-              whileTap={{
-                scale: 0.98,
-                transition: { duration: 0.1 }
-              }}
-            >
-              Vote
-            </motion.button>
-            {isVoteLoading && (
-              <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
-                <Spinner size="md" color="white" />
-              </div>
-            )}
-          </div>
-        </form>
+            </div>
+            {isVisible && <Confetti />}
+            <div className="relative items-center mx-auto text-2xl mt-8 ">
+              <motion.button
+                type="submit"
+                className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
+                  isVoteLoading ? "opacity-0 pointer-events-none" : ""
+                }`}
+                whileHover={{
+                  scale: 1.04,
+                  transition: { duration: 0.1 }
+                }}
+                whileTap={{
+                  scale: 0.98,
+                  transition: { duration: 0.1 }
+                }}
+              >
+                Vote
+              </motion.button>
+              {isVoteLoading && (
+                <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
+                  <Spinner size="md" color="white" />
+                </div>
+              )}
+            </div>
+          </form>
+        ) : (
+          <DriversSkeleton />
+        )}
       </main>
     );
   }

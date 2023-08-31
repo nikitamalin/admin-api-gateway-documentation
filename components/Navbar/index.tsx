@@ -26,7 +26,7 @@ export default function Navbar({ children }: Props) {
             <Link href="/" className="my-5 mr-auto">
               <Image
                 src="/cariq.png"
-                width="100"
+                width="126"
                 height="32"
                 alt="CarIQ"
               ></Image>
@@ -38,7 +38,7 @@ export default function Navbar({ children }: Props) {
                   onToggle();
                 }}
               >
-                Profile <CgProfile size="24" />
+                <CgProfile size="32" className="text-orange" />
               </button>
             </div>
           </nav>

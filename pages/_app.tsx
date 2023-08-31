@@ -28,7 +28,7 @@ export default function App({
               name="description"
               content="Car IQ has created a payment solution for fleet vehicles that enables fleets to pay for goods without a credit card. Vehicles autonomously initiate and complete payments for services such as fuel, tolls, parking, and more."
             />
-            <meta property="image" content="/cariq_logo.png" />
+            <meta property="image" content="/cariq.png" />
             <meta
               name="viewport"
               content="initial-scale=1.0, width=device-width"
@@ -40,7 +40,7 @@ export default function App({
               property="og:description"
               content="Car IQ has created a payment solution for fleet vehicles that enables fleets to pay for goods without a credit card. Vehicles autonomously initiate and complete payments for services such as fuel, tolls, parking, and more."
             />
-            <meta property="og:image" content="/cariq_logo.png" />
+            <meta property="og:image" content="/cariq.png" />
           </Head>
           <Analytics />
           <Navbar />
