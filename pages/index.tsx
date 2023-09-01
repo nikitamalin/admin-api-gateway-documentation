@@ -29,14 +29,15 @@ import {
   ModalContent,
   ModalHeader,
   ModalFooter,
+  useDisclosure,
   ModalBody,
   ModalCloseButton
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useProfileContext } from "@/components/Context/ProfileContext";
 import Confetti from "@/components/Confetti";
-import DriversSkeleton from "@/components/Skeletons/Drivers";
 
+import { useDriverContext } from "@/components/Context/DriverContext";
 export default function Home() {
   const { data: session, status } = useSession();
   const [isSignInLoading, setIsSignInLoading] = useState(false);
@@ -54,16 +55,17 @@ export default function Home() {
   const [isVisible, setIsVisible] = useState(false);
   const [firstPass, setFirstPass] = useState<boolean>(true);
   const [idToken, setIdToken] = useState<string>("");
+  const {
+    isOpen: signInIsOpen,
+    onOpen: signInOnOpen,
+    onClose: signInOnClose
+  } = useDisclosure();
+
+  let { drivers, isDriversLoading } = useDriverContext();
 
   const labelStyles = "mt-4 text-xl";
   const inputStyles =
     "mt-1 mr-1 border border-gray rounded-md py-1 px-3 text-2xl outline-blue cursor-text";
-
-  const standingsURL = `/api/get-standings`;
-  const { data: standings } = useSwr(standingsURL, async () => {
-    const res = await fetch(standingsURL);
-    return res.json();
-  });
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -90,40 +92,14 @@ export default function Home() {
     return res.json();
   });
 
-  if (status === "unauthenticated") {
-    return (
-      <main
-        className={`flex h-[calc(100svh-73px)] flex-col items-center gap-10  bg-light p-24 ${inter.className}`}
-      >
-        <span className="text-4xl text-center">
-          <span className="font-semibold text-blue">Sign In</span> to Vote!
-        </span>
-        <div className="relative items-center ">
-          <button
-            onClick={() => {
-              setIsSignInLoading(true);
-              signIn("auth0", { callbackUrl: "/" }, { prompt: "login" }).then(
-                () => {
-                  setIsSignInLoading(false);
-                }
-              );
-            }}
-            className={`py-2 px-3 bg-orange rounded-lg hover:bg-orangeHover cursor-pointer text-white text-xl font-semibold
-                ${isSignInLoading ? "opacity-0 pointer-events-none" : ""}`}
-          >
-            Sign In
-          </button>
-          {isSignInLoading && (
-            <div
-              className="absolute inset-0 flex items-center justify-center bg-orange opacity-50 rounded-lg shadow-md py-2 px-3
-                   cursor-not-allowed"
-            >
-              <Spinner size="md" color="white" />
-            </div>
-          )}
-        </div>
-      </main>
-    );
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      signInOnOpen();
+    }
+  }, [status, signInOnOpen]);
+
+  if (isDriversLoading) {
+    return;
   }
 
   const createToast = (response: any, isBlue = false) => {
@@ -202,11 +178,69 @@ export default function Home() {
     setFirstPass(false);
   }
 
-  if (status === "authenticated") {
-    return (
-      <main
-        className={`flex h-[calc(100svh-73px)] flex-col items-center pt-12 pb-20 bg-light ${inter.className}`}
-      >
+  function fakeClose() {
+    return true;
+  }
+  return (
+    <main
+      className={`flex h-[calc(100svh-73px)] flex-col items-center pt-12 pb-20 bg-light ${inter.className}`}
+    >
+      {status === "unauthenticated" && (
+        <Modal isOpen={true} onClose={fakeClose} isCentered>
+          <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
+          <ModalContent>
+            <ModalBody>
+              <div className="flex flex-col items-center gap-10 p-10">
+                <div
+                  className="relative
+			w-[46px] h-[46px] 
+			footerSM:w-[66px] footerSM:h-[66px] 
+			md:w-[90px] md:h-[90px] "
+                >
+                  <Image src="/fab4_logo.png" alt="Logo" fill />
+                </div>
+                <span className="text-4xl text-center">
+                  <span className="font-semibold text-blue">Sign In</span> to
+                  Vote!
+                </span>
+                <span className="text-center">
+                  Cast your vote for a chance to win an all expense paid trip to
+                  the Turkey Night Grand Prix
+                </span>
+                <div className="relative items-center ">
+                  <button
+                    onClick={() => {
+                      setIsSignInLoading(true);
+                      signIn(
+                        "auth0",
+                        { callbackUrl: "/" },
+                        { prompt: "login" }
+                      ).then(() => {
+                        setIsSignInLoading(false);
+                      });
+                    }}
+                    className={`py-2 px-3 bg-orange rounded-lg hover:bg-orangeHover cursor-pointer text-white text-xl font-semibold outline-none
+                      ${
+                        isSignInLoading ? "opacity-0 pointer-events-none" : ""
+                      }`}
+                  >
+                    Sign In to Win
+                  </button>
+                  {isSignInLoading && (
+                    <div
+                      className="absolute inset-0 flex items-center justify-center bg-orange opacity-50 rounded-lg shadow-md py-2 px-3
+                         cursor-not-allowed"
+                    >
+                      <Spinner size="md" color="white" />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      )}
+      {status === "authenticated" && (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
           <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
           <ModalContent>
@@ -294,104 +328,99 @@ export default function Home() {
             </ModalBody>
           </ModalContent>
         </Modal>
-        {standings ? (
-          <form
-            id="form"
-            className="flex flex-col base:w-[96%] footerXM:w-[90%] md:w-[700px] bg-white py-4 px-6 tableSM:py-6 tableSM:px-9 md:py-8 md:px-12 rounded-lg shadow-lg"
-            onSubmit={handleVote}
+      )}
+
+      <form
+        id="form"
+        className="flex flex-col base:w-[96%] footerXM:w-[90%] md:w-[700px] bg-white py-4 px-6 tableSM:py-6 tableSM:px-9 md:py-8 md:px-12 rounded-lg shadow-lg"
+        onSubmit={handleVote}
+      >
+        <table className="bg-white table-auto ">
+          <thead>
+            <tr>
+              <th>Position</th>
+              <th>Driver</th>
+              <th>Votes</th>
+            </tr>
+          </thead>
+          <tbody>
+            {drivers.map((driver: any, index: number) => {
+              return (
+                <Fragment key={index}>
+                  <tr
+                    className={` hover:cursor-pointer py-2 row ${
+                      vote === index + 1 ? "bg-orangeComp" : "hover:bg-light"
+                    }`}
+                    onClick={(e) => {
+                      setVote(index + 1);
+                      setDriver(driver.driver);
+                    }}
+                  >
+                    <td className="py-2 text-center">
+                      <span className="text-sm footerXM:text-md lgMenu:text-lg md:text-xl">
+                        {index + 1}
+                      </span>
+                    </td>
+                    <td className="py-2 text-center pr-2 footerXM:px-0">
+                      <div className="flex items-center justify-center gap-2 ">
+                        <div className="relative w-[32px] h-[32px] lgMenu:w-[48px] lgMenu:h-[48px] md:w-[64px] md:h-[64px]">
+                          <Image
+                            fill
+                            src={driver.image}
+                            alt={driver.driver}
+                            className="rounded-full"
+                          />
+                        </div>
+
+                        <span className="text-md footerXM:text-lg lgMenu:text-xl md:text-2xl">
+                          {driver.driver}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-2 text-center">
+                      <span className="text-md footerXM:text-lg lgMenu:text-xl md:text-2xl ">
+                        {driver.fan_votes.toLocaleString()}
+                      </span>
+                    </td>
+                  </tr>
+                  {index !== 3 && (
+                    <tr>
+                      <td colSpan={3}>
+                        <hr className="bg-[#C3C3C3] h-[1px]"></hr>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })}
+          </tbody>
+        </table>
+
+        {isVisible && <Confetti />}
+        <div className="relative items-center mx-auto text-2xl mt-8 ">
+          <motion.button
+            type="submit"
+            className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
+              isVoteLoading ? "opacity-0 pointer-events-none" : ""
+            }`}
+            whileHover={{
+              scale: 1.04,
+              transition: { duration: 0.1 }
+            }}
+            whileTap={{
+              scale: 0.98,
+              transition: { duration: 0.1 }
+            }}
           >
-            <table className="bg-white table-auto ">
-              <thead>
-                <tr>
-                  <th>Position</th>
-                  <th>Driver</th>
-                  <th>Votes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {standings.map((standing: any, index: number) => {
-                  return (
-                    <Fragment key={index}>
-                      <tr
-                        className={` hover:cursor-pointer py-2 row ${
-                          vote === index + 1
-                            ? "bg-orangeComp"
-                            : "hover:bg-light"
-                        }`}
-                        onClick={(e) => {
-                          setVote(index + 1);
-                          setDriver(standing.driver);
-                        }}
-                      >
-                        <td className="py-2 text-center">
-                          <span className="text-sm footerXM:text-md footerMS:text-lg md:text-xl">
-                            {index + 1}
-                          </span>
-                        </td>
-                        <td className="py-2 text-center">
-                          <div className="flex items-center justify-center gap-2 ">
-                            <div className="relative w-[32px] h-[32px] footerMS:w-[48px] footerMS:h-[48px] md:w-[64px] md:h-[64px]">
-                              <Image
-                                fill
-                                src={standing.image}
-                                alt={standing.driver}
-                                className="rounded-full"
-                              />
-                            </div>
-
-                            <span className="text-md footerXM:text-lg footerMS:text-xl md:text-2xl">
-                              {standing.driver}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-2 text-center">
-                          <span className="text-md footerXM:text-lg footerMS:text-xl md:text-2xl ">
-                            {standing.fan_votes.toLocaleString()}
-                          </span>
-                        </td>
-                      </tr>
-                      {index !== 3 && (
-                        <tr>
-                          <td colSpan={3}>
-                            <hr className="bg-[#C3C3C3] h-[1px]"></hr>
-                          </td>
-                        </tr>
-                      )}
-                    </Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
-
-            {isVisible && <Confetti />}
-            <div className="relative items-center mx-auto text-2xl mt-8 ">
-              <motion.button
-                type="submit"
-                className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                  isVoteLoading ? "opacity-0 pointer-events-none" : ""
-                }`}
-                whileHover={{
-                  scale: 1.04,
-                  transition: { duration: 0.1 }
-                }}
-                whileTap={{
-                  scale: 0.98,
-                  transition: { duration: 0.1 }
-                }}
-              >
-                Vote
-              </motion.button>
-              {isVoteLoading && (
-                <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
-                  <Spinner size="md" color="white" />
-                </div>
-              )}
+            Vote
+          </motion.button>
+          {isVoteLoading && (
+            <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
+              <Spinner size="md" color="white" />
             </div>
-          </form>
-        ) : (
-          <DriversSkeleton />
-        )}
-      </main>
-    );
-  }
+          )}
+        </div>
+      </form>
+    </main>
+  );
 }

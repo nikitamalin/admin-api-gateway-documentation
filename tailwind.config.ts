@@ -18,6 +18,7 @@ const config: Config = {
       blue: "#219EF4",
       //blue: '#1fb6ff',
       blueHover: "#3391ff",
+      fab4: "#30c0d4",
       orange: "#F47721",
       orangeHover: "#D75E0B",
       orangeComp: "#219EF4",

@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Spinner } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import { useProfileContext } from "../Context/ProfileContext";
+import { useDriverContext } from "../Context/DriverContext";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface Props {
@@ -15,9 +16,11 @@ interface Props {
 export default function Navbar({ children }: Props) {
   const { data: session, status } = useSession();
   let onToggle = useProfileContext().onToggle;
-  let isOpen = useProfileContext().isOpen;
+  let isDriversLoading = useDriverContext().isDriversLoading;
 
-  if (status === "loading") {
+  console.log("Loading: ", isDriversLoading);
+
+  if (status === "loading" || isDriversLoading) {
     return <LoadingSpinner />;
   }
 
