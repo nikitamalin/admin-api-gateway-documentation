@@ -17,6 +17,7 @@ export default function App({
       <ChakraProvider theme={theme}>
         <ProfileContextWrapper>
           <Head>
+            <title>Car IQ Pay</title>
             <meta charSet="UTF-8" />
             <meta name="application-name" content="Car IQ" />
             <meta

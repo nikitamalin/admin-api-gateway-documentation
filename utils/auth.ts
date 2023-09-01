@@ -13,7 +13,7 @@ export function isValidToken(idToken: string, email: string) {
     decodedToken.email !== email ||
     decodedToken.iss !== "https://fab4.us.auth0.com/" ||
     decodedToken.exp < currentTime ||
-    decodedToken.auth_time !== decodedToken.iat
+    Math.abs(decodedToken.auth_time - decodedToken.iat) > 5
   ) {
     return false;
   }

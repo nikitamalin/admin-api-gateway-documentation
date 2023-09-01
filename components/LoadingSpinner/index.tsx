@@ -9,7 +9,7 @@ export default function LoadingSpinner() {
           thickness="4px"
           speed=".8s"
           emptyColor="gray.200"
-          color="#007cf2"
+          color="#219EF4"
           width={{ base: "100px", footerSM: "140px", md: "200px" }}
           height={{ base: "100px", footerSM: "140px", md: "200px" }}
         />

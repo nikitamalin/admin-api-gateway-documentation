@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import { Spinner } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import { useProfileContext } from "../Context/ProfileContext";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 interface Props {
   children?: ReactNode;
@@ -15,9 +16,11 @@ export default function Navbar({ children }: Props) {
   const { data: session, status } = useSession();
   let onToggle = useProfileContext().onToggle;
   let isOpen = useProfileContext().isOpen;
+
   if (status === "loading") {
-    return;
+    return <LoadingSpinner />;
   }
+
   return (
     <div className="flex flex-col relative">
       <div className="flex flex-col w-full justify-center font-helvetica font-normal items-center bg-white ">

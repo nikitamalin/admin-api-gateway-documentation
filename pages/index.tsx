@@ -90,10 +90,6 @@ export default function Home() {
     return res.json();
   });
 
-  if (status === "loading") {
-    return <LoadingSpinner />;
-  }
-
   if (status === "unauthenticated") {
     return (
       <main
@@ -202,7 +198,7 @@ export default function Home() {
     setPhoneNumber(profile.phone_number);
     setGender(profile.gender);
     setAge(profile.age);
-    if (!profile.profile_compelete) {
+    if (!profile.profile_complete) {
       onOpen();
     }
     setFirstPass(false);
