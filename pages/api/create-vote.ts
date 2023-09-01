@@ -68,6 +68,7 @@ export default async function handler(
 
       maybe
       - phone verification api
+      - ip address log to votelog and check
     */
 
     if (!driver) {

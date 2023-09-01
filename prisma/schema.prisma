@@ -27,7 +27,7 @@ model voteLog {
   is_valid     Boolean   @default(true)
   phone_number String    @default("")
   standings    standings @relation(fields: [driver_vote], references: [driver], onDelete: NoAction, onUpdate: NoAction)
-  User         userInfo  @relation(fields: [email], references: [email], onDelete: NoAction, onUpdate: NoAction)
+  User         userInfo  @relation(fields: [email], references: [email], onDelete: Cascade, onUpdate: NoAction)
 }
 
 /// This model contains row level security and requires additional setup for migrations. Visit https://pris.ly/d/row-level-security for more info.
