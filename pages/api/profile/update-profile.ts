@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
-
+import { isValidToken } from "@/utils/auth";
 const schema = z.object({
   email: z.string().email(),
   name: z.string(),
@@ -24,7 +24,7 @@ export default async function handler(
     const event = schema.parse(JSON.parse(req.body));
     const email = event.email;
     const name = event.name;
-    const phoneNumber = event.phoneNumber;
+    const phoneNumber = "+" + event.phoneNumber.substring(1);
     const gender = event.gender;
     const age = event.age;
     /*
@@ -32,15 +32,23 @@ export default async function handler(
         - email is unique
     */
 
+    if (!isValidToken(event.idToken, phoneNumber)) {
+      res.status(200).json({ message: "Success" });
+      return;
+    }
+
     let isEmailInDB = await prisma.userInfo.findMany({
       where: {
+        NOT: {
+          phone_number: phoneNumber
+        },
         email: email
       }
     });
 
     if (isEmailInDB.length > 0) {
       res
-        .status(403)
+        .status(400)
         .json({ message: "Email already in use. Please try another." });
       return;
     }

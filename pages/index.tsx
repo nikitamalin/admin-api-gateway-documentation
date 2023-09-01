@@ -9,26 +9,17 @@ import useSwr from "swr";
 import { useState, useEffect, Fragment } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {
-  Menu,
-  MenuList,
-  Switch,
   useToast,
   Spinner,
-  Avatar,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
+  AlertDescription,
+  Alert,
+  AlertIcon,
+  chakra,
+  CloseButton,
+  AlertTitle,
   Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
-  ModalFooter,
   useDisclosure,
   ModalBody,
   ModalCloseButton
@@ -36,6 +27,8 @@ import {
 import { motion } from "framer-motion";
 import { useProfileContext } from "@/components/Context/ProfileContext";
 import Confetti from "@/components/Confetti";
+import Error from "@/components/Toast/error";
+import Success from "@/components/Toast/success";
 
 import { useDriverContext } from "@/components/Context/DriverContext";
 export default function Home() {
@@ -102,14 +95,17 @@ export default function Home() {
     return;
   }
 
-  const createToast = (response: any, isBlue = false) => {
+  const createSuccessToast = (res: any, isBlue = false) => {
     toast({
       position: "top-right",
-      render: () => (
-        <div className={`${isBlue ? "bg-blue" : "bg-orange"} p-3 rounded-lg`}>
-          {response.message}
-        </div>
-      )
+      render: () => <Success message={res.message} />
+    });
+  };
+
+  const createErrorToast = (res: any, isBlue = false) => {
+    toast({
+      position: "top-right",
+      render: () => <Error message={res.message} />
     });
   };
 
@@ -119,12 +115,8 @@ export default function Home() {
     const response = await fetch("/api/create-vote", {
       method: "POST",
       body: JSON.stringify({
-        email: session?.user?.email,
         driver: driver,
-        name: name,
         phoneNumber: phoneNumber,
-        gender: gender,
-        age: age,
         idToken: idToken
       })
     });
@@ -135,9 +127,9 @@ export default function Home() {
       res.message === "Vote counted, we'll see you again tomorrow!"
     ) {
       setIsVisible(true);
-      createToast(res, true);
+      createSuccessToast(res, true);
     } else {
-      createToast(res);
+      createErrorToast(res);
     }
     setIsVoteLoading(false);
     return await res;
@@ -161,16 +153,18 @@ export default function Home() {
     if (res.message === "Success") {
       res.message = "Saved";
       onClose();
+      createSuccessToast(res);
+    } else {
+      createErrorToast(res);
     }
-    createToast(res);
 
     setIsProfileLoading(false);
     return await res;
   }
 
-  if (firstPass && email && profile && !("message" in profile)) {
+  if (firstPass && phoneNumber && profile && !("message" in profile)) {
     setName(profile.name);
-    setPhoneNumber(profile.phone_number);
+    setEmail(profile.email);
     setGender(profile.gender);
     setAge(profile.age);
     if (!profile.profile_complete) {
@@ -182,6 +176,8 @@ export default function Home() {
   function fakeClose() {
     return true;
   }
+  let response: any = {};
+
   return (
     <main
       className={`flex h-[calc(100svh-73px)] flex-col items-center pt-12 pb-20 bg-light ${inter.className}`}

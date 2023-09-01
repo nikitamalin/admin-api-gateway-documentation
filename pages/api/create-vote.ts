@@ -1,16 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
-
+import { IP2Proxy } from "ip2proxy-nodejs";
 import { isValidToken } from "@/utils/auth";
 import { isWeekendPST, dstOffset, getCaliforniaTime } from "@/utils/validation";
 
 const schema = z.object({
   driver: z.string(),
-  name: z.string(),
   phoneNumber: z.string(),
-  gender: z.string(),
-  age: z.string(),
   idToken: z.string()
 });
 
@@ -47,10 +44,8 @@ export default async function handler(
   try {
     const event = schema.parse(JSON.parse(req.body));
     const driver = event.driver;
-    const name = event.name;
-    const phoneNumber = event.phoneNumber;
-    const gender = event.gender;
-    const age = event.age;
+    const phoneNumber = "+" + event.phoneNumber.substring(1);
+
     /* 
     Validation check:
       - Selected a driver
@@ -60,6 +55,7 @@ export default async function handler(
       - Is user's profile complete?
       - Hasn't voted today
       - ip address not used today -> already voted better return than vote went in
+      - ip adderss not a proxy
 
 
       maybe
@@ -69,12 +65,12 @@ export default async function handler(
     */
 
     if (!driver) {
-      res.status(403).json({ message: "Please select a driver" });
+      res.status(400).json({ message: "Please select a driver" });
       return;
     }
 
-    if (!isWeekendPST() && false) {
-      res.status(403).json({
+    if (!isWeekendPST()) {
+      res.status(400).json({
         message: "Voting is only allowed during the weekend California Time"
       });
       return;
@@ -124,7 +120,7 @@ export default async function handler(
     }
 
     if (!user.profile_complete) {
-      res.status(403).json({ message: "Please complete your profile" });
+      res.status(400).json({ message: "Please complete your profile" });
       return;
     }
 

@@ -18,7 +18,7 @@ export default async function handler(
 
   try {
     const event = schema.parse(req.query);
-    const phoneNumber = event.phoneNumber;
+    const phoneNumber = "+" + event.phoneNumber.substring(1);
 
     if (!isValidToken(event.idToken, phoneNumber)) {
       res.status(200).json({ message: "Success" });
@@ -31,12 +31,13 @@ export default async function handler(
       },
       select: {
         name: true,
-        phone_number: true,
+        email: true,
         gender: true,
         age: true,
         profile_complete: true
       }
     });
+
     res.status(200).json(result[0]);
   } catch (err) {
     if (err instanceof ZodError) {
