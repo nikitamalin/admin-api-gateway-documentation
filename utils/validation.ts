@@ -126,13 +126,5 @@ export function isEmailValid(email: string) {
     return false;
   }
 
-  const Verifier = require("email-verifier");
-
-  let verifier = new Verifier("your_email_verification_api_key");
-  verifier.verify(email, (err: any, data: any) => {
-    if (err) throw err;
-    console.log(data);
-  });
-
   return true;
 }
