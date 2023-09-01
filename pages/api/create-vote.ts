@@ -35,7 +35,6 @@ async function createVote(
       }
     });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ message: "Internal server error" });
     return;
   }
@@ -65,7 +64,10 @@ export default async function handler(
       - is a User -> has to sign in
       - Is user's profile complete?
       - Hasn't voted today
-      - email not in blacklisted email list
+      - email not in blacklisted email list 
+
+      maybe
+      - phone verification api
     */
 
     if (!driver) {
@@ -80,9 +82,20 @@ export default async function handler(
       return;
     }
 
+    let isTmrwVoting = false;
+    let dayOfWeek = getCaliforniaTime().getDay();
+    if (dayOfWeek === 5 || dayOfWeek === 6) {
+      isTmrwVoting = true;
+    }
+    let message =
+      "Vote went in, check back in tomorrow to view results and we'll see you next weekend!";
+    if (isTmrwVoting) {
+      message = "Vote went in, we'll see you again tomorrow!";
+    }
+
     if (!isValidToken(event.idToken, email)) {
       createVote(res, email, driver);
-      res.status(200).json({ message: "Success" });
+      res.status(200).json({ message: message });
       return;
     }
 
@@ -98,7 +111,7 @@ export default async function handler(
     if (!user) {
       createVote(res, email, driver);
       res.status(200).json({
-        message: "Success"
+        message: message
       });
       return;
     }
@@ -121,8 +134,7 @@ export default async function handler(
     });
 
     if (votedToday.length !== 0) {
-      let dayOfWeek = getCaliforniaTime().getDay();
-      if (dayOfWeek === 5 || dayOfWeek === 6) {
+      if (isTmrwVoting) {
         res.status(403).json({
           message:
             "You have already voted today. Please check back in tomorrow."
@@ -137,13 +149,14 @@ export default async function handler(
 
     if (!isEmailValid(email)) {
       createVote(res, email, driver);
-      res.status(200).json({ message: "Success" });
+      res.status(200).json({ message: message });
       return;
     }
+
     createVote(res, email, driver, true);
-    res.status(200).json({ message: "Success" });
+
+    res.status(200).json({ message: message });
   } catch (error) {
-    console.log(error);
     if (error instanceof ZodError) {
       res.status(400).json({ message: "Invalid request" });
     } else {

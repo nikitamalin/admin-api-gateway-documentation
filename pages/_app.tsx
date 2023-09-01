@@ -17,7 +17,7 @@ export default function App({
       <ChakraProvider theme={theme}>
         <ProfileContextWrapper>
           <Head>
-            <title>Car IQ Pay</title>
+            <title>Car IQ Pay Voting</title>
             <meta charSet="UTF-8" />
             <meta name="application-name" content="Car IQ" />
             <meta
@@ -35,7 +35,7 @@ export default function App({
               content="initial-scale=1.0, width=device-width"
             />
             <link rel="shortcut icon" href="/favicon.png" type="image/x-icon" />
-            <meta property="og:title" content="Go Car IQ" />
+            <meta property="og:title" content="Car IQ Pay" />
             <meta property="og:type" content="website" />
             <meta
               property="og:description"

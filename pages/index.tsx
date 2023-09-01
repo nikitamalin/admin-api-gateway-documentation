@@ -126,22 +126,15 @@ export default function Home() {
     );
   }
 
-  const createToast = (response: any) => {
-    if (response.ok) {
-      toast({
-        position: "top-right",
-        render: () => (
-          <div className="bg-blue p-3 rounded-lg">{response.message}</div>
-        )
-      });
-    } else {
-      toast({
-        position: "top-right",
-        render: () => (
-          <div className="bg-orange p-3 rounded-lg">{response.message}</div>
-        )
-      });
-    }
+  const createToast = (response: any, isBlue = false) => {
+    toast({
+      position: "top-right",
+      render: () => (
+        <div className={`${isBlue ? "bg-blue" : "bg-orange"} p-3 rounded-lg`}>
+          {response.message}
+        </div>
+      )
+    });
   };
 
   async function handleVote(e: React.FormEvent<HTMLFormElement>) {
@@ -160,10 +153,15 @@ export default function Home() {
       })
     });
     const res = await response.json();
-    if (res.message !== "Success") {
-      createToast(res);
-    } else {
+    if (
+      res.message ===
+        "Vote went in, check back in tomorrow to view results and we'll see you next weekend!" ||
+      res.message === "Vote went in, we'll see you again tomorrow!"
+    ) {
       setIsVisible(true);
+      createToast(res, true);
+    } else {
+      createToast(res);
     }
     setIsVoteLoading(false);
     return await res;
@@ -296,7 +294,6 @@ export default function Home() {
             </ModalBody>
           </ModalContent>
         </Modal>
-
         {standings ? (
           <form
             id="form"
