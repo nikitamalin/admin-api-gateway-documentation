@@ -14,12 +14,11 @@ export default NextAuth({
   ],
   callbacks: {
     async signIn({ user, profile }) {
-      if (user && user.email && profile && profile.name) {
+      if (profile && profile.name) {
         try {
           await prisma.userInfo.create({
             data: {
-              email: user.email,
-              name: profile.name
+              phone_number: profile.name
             }
           });
         } catch (err) {

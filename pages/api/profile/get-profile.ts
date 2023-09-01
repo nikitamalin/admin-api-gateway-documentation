@@ -3,7 +3,7 @@ import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
 import { isValidToken } from "@/utils/auth";
 const schema = z.object({
-  email: z.string().email(),
+  phoneNumber: z.string(),
   idToken: z.string()
 });
 
@@ -18,16 +18,16 @@ export default async function handler(
 
   try {
     const event = schema.parse(req.query);
-    const email = event.email;
+    const phoneNumber = event.phoneNumber;
 
-    if (!isValidToken(event.idToken, email)) {
+    if (!isValidToken(event.idToken, phoneNumber)) {
       res.status(200).json({ message: "Success" });
       return;
     }
 
     const result = await prisma.userInfo.findMany({
       where: {
-        email: email
+        phone_number: phoneNumber
       },
       select: {
         name: true,

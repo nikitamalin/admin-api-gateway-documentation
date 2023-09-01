@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
-import { phone } from "phone";
 
 const schema = z.object({
   email: z.string().email(),
@@ -30,25 +29,29 @@ export default async function handler(
     const age = event.age;
     /*
     Validation:
-        - Phone validation
-        
-        maybe: 
-        - Phone is unique
+        - email is unique
     */
 
-    const isPhoneValid = phone(phoneNumber);
-    if (!isPhoneValid.isValid) {
-      res.status(403).json({ message: "Phone Number format is invalid" });
+    let isEmailInDB = await prisma.userInfo.findMany({
+      where: {
+        email: email
+      }
+    });
+
+    if (isEmailInDB.length > 0) {
+      res
+        .status(403)
+        .json({ message: "Email already in use. Please try another." });
       return;
     }
 
     await prisma.userInfo.update({
       where: {
-        email: email
+        phone_number: phoneNumber
       },
       data: {
+        email: email,
         name: name,
-        phone_number: phoneNumber,
         gender: gender,
         age: age,
         profile_complete: true
@@ -58,7 +61,7 @@ export default async function handler(
     res.status(200).json({ message: "Success" });
   } catch (err) {
     if (err instanceof ZodError) {
-      res.status(400).json({ message: "Invalid request" });
+      res.status(400).json({ message: "Invalid email." });
     } else {
       res.status(500).json({ message: "Internal server error" });
     }

@@ -70,8 +70,8 @@ export default function Home() {
   useEffect(() => {
     const fetchSession = async () => {
       if (session && session.user) {
-        if (session.user.email) {
-          setEmail(session.user.email);
+        if (session.user.name) {
+          setPhoneNumber(session.user.name);
         }
         if (session.idToken) {
           setIdToken(session.idToken);
@@ -83,8 +83,8 @@ export default function Home() {
   }, [session]);
 
   let profileURL = "";
-  if (email && idToken) {
-    profileURL = `/api/profile/get-profile?email=${email}&idToken=${idToken}`;
+  if (phoneNumber && idToken) {
+    profileURL = `/api/profile/get-profile?phoneNumber=${phoneNumber}&idToken=${idToken}`;
   }
 
   const { data: profile } = useSwr(profileURL, async () => {
@@ -149,7 +149,7 @@ export default function Home() {
     const response = await fetch("/api/profile/update-profile", {
       method: "POST",
       body: JSON.stringify({
-        email: session?.user?.email,
+        email: email,
         name: name,
         phoneNumber: phoneNumber,
         gender: gender,
@@ -158,11 +158,12 @@ export default function Home() {
       })
     });
     const res = await response.json();
-    if (res.message !== "Success") {
-      createToast(res);
-    } else {
+    if (res.message === "Success") {
+      res.message = "Saved";
       onClose();
     }
+    createToast(res);
+
     setIsProfileLoading(false);
     return await res;
   }
@@ -193,9 +194,9 @@ export default function Home() {
               <div className="flex flex-col items-center gap-10 p-10">
                 <div
                   className="relative
-			w-[46px] h-[46px] 
-			footerSM:w-[66px] footerSM:h-[66px] 
-			md:w-[90px] md:h-[90px] "
+			w-[66px] h-[66px] 
+			footerSM:w-[100px] footerSM:h-[100px] 
+			md:w-[120px] md:h-[120px] "
                 >
                   <Image src="/fab4_logo.png" alt="Logo" fill />
                 </div>
@@ -224,7 +225,7 @@ export default function Home() {
                         isSignInLoading ? "opacity-0 pointer-events-none" : ""
                       }`}
                   >
-                    Sign In to Win
+                    Sign In to Win!
                   </button>
                   {isSignInLoading && (
                     <div
@@ -263,15 +264,15 @@ export default function Home() {
                   onChange={(e) => setName(e.target.value)}
                 ></input>
                 <label className={labelStyles}>
-                  Phone Number<span className="text-[#E53B17] ml-[2px]">*</span>
+                  Email<span className="text-[#E53B17] ml-[2px]">*</span>
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   className={inputStyles}
                   required
-                  placeholder="##########"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 ></input>
                 <label className={labelStyles}>Gender</label>
                 <select

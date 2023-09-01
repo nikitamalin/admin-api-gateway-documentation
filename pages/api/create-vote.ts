@@ -3,15 +3,9 @@ import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
 
 import { isValidToken } from "@/utils/auth";
-import {
-  isEmailValid,
-  isWeekendPST,
-  dstOffset,
-  getCaliforniaTime
-} from "@/utils/validation";
+import { isWeekendPST, dstOffset, getCaliforniaTime } from "@/utils/validation";
 
 const schema = z.object({
-  email: z.string().email(),
   driver: z.string(),
   name: z.string(),
   phoneNumber: z.string(),
@@ -23,14 +17,14 @@ const schema = z.object({
 async function createVote(
   res: NextApiResponse,
   ip: string,
-  email: string,
+  phoneNumber: string,
   driver: string,
   isValid = false
 ) {
   try {
     let result = await prisma.voteLog.create({
       data: {
-        email: email,
+        phone_number: phoneNumber,
         driver_vote: driver,
         ip: ip,
         is_valid: isValid
@@ -52,7 +46,6 @@ export default async function handler(
   }
   try {
     const event = schema.parse(JSON.parse(req.body));
-    const email = event.email;
     const driver = event.driver;
     const name = event.name;
     const phoneNumber = event.phoneNumber;
@@ -67,12 +60,12 @@ export default async function handler(
       - Is user's profile complete?
       - Hasn't voted today
       - ip address not used today -> already voted better return than vote went in
-      - email not in blacklisted email list 
+
 
       maybe
       - phone verification api
-
-      fake emails get sent an alreadyVoted message w/ status 200
+      - email not in blacklisted email list 
+      - fake emails get sent an alreadyVoted message w/ status 200
     */
 
     if (!driver) {
@@ -107,15 +100,15 @@ export default async function handler(
         "You have already voted today. Please check back in tomorrow.";
     }
 
-    if (!isValidToken(event.idToken, email)) {
-      createVote(res, ip, email, driver);
+    if (!isValidToken(event.idToken, phoneNumber)) {
+      createVote(res, ip, phoneNumber, driver);
       res.status(200).json({ message: alreadyVoted });
       return;
     }
 
     let user = await prisma.userInfo.findUnique({
       where: {
-        email: email
+        phone_number: phoneNumber
       },
       select: {
         profile_complete: true
@@ -123,7 +116,7 @@ export default async function handler(
     });
 
     if (!user) {
-      createVote(res, ip, email, driver);
+      createVote(res, ip, phoneNumber, driver);
       res.status(200).json({
         message: alreadyVoted
       });
@@ -142,7 +135,7 @@ export default async function handler(
       where: {
         OR: [
           {
-            email: email,
+            phone_number: phoneNumber,
             created_at: {
               gte: time
             }
@@ -164,13 +157,7 @@ export default async function handler(
       return;
     }
 
-    if (!isEmailValid(email)) {
-      createVote(res, ip, email, driver);
-      res.status(200).json({ message: alreadyVoted });
-      return;
-    }
-
-    createVote(res, ip, email, driver, true);
+    createVote(res, ip, phoneNumber, driver, true);
 
     res.status(200).json({ message: message });
   } catch (error) {

@@ -18,8 +18,6 @@ export default function Navbar({ children }: Props) {
   let onToggle = useProfileContext().onToggle;
   let isDriversLoading = useDriverContext().isDriversLoading;
 
-  console.log("Loading: ", isDriversLoading);
-
   if (status === "loading" || isDriversLoading) {
     return <LoadingSpinner />;
   }
