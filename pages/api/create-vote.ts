@@ -66,11 +66,13 @@ export default async function handler(
       - is a User -> has to sign in
       - Is user's profile complete?
       - Hasn't voted today
-      - ip address log to votelog and check
+      - ip address not used today -> already voted better return than vote went in
       - email not in blacklisted email list 
 
       maybe
       - phone verification api
+
+      fake emails get sent an alreadyVoted message w/ status 200
     */
 
     if (!driver) {
@@ -95,15 +97,19 @@ export default async function handler(
     if (dayOfWeek === 5 || dayOfWeek === 6) {
       isTmrwVoting = true;
     }
+    let alreadyVoted = "You have already voted today.";
+
     let message =
-      "Vote went in, check back in tomorrow to view results and we'll see you next weekend!";
+      "Vote counted, check back in tomorrow to view results and we'll see you next weekend!";
     if (isTmrwVoting) {
-      message = "Vote went in, we'll see you again tomorrow!";
+      message = "Vote counted, we'll see you again tomorrow!";
+      alreadyVoted =
+        "You have already voted today. Please check back in tomorrow.";
     }
 
     if (!isValidToken(event.idToken, email)) {
       createVote(res, ip, email, driver);
-      res.status(200).json({ message: message });
+      res.status(200).json({ message: alreadyVoted });
       return;
     }
 
@@ -119,7 +125,7 @@ export default async function handler(
     if (!user) {
       createVote(res, ip, email, driver);
       res.status(200).json({
-        message: message
+        message: alreadyVoted
       });
       return;
     }
@@ -142,7 +148,9 @@ export default async function handler(
             }
           },
           {
-            email: email,
+            created_at: {
+              gte: time
+            },
             ip: ip
           }
         ]
@@ -150,22 +158,15 @@ export default async function handler(
     });
 
     if (votedToday.length !== 0) {
-      if (isTmrwVoting) {
-        res.status(403).json({
-          message:
-            "You have already voted today. Please check back in tomorrow."
-        });
-        return;
-      }
-      res.status(403).json({
-        message: "You have already voted today."
+      res.status(200).json({
+        message: alreadyVoted
       });
       return;
     }
 
     if (!isEmailValid(email)) {
       createVote(res, ip, email, driver);
-      res.status(200).json({ message: message });
+      res.status(200).json({ message: alreadyVoted });
       return;
     }
 

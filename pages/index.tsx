@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 import { signIn } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import useSwr from "swr";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   Menu,
@@ -95,7 +95,7 @@ export default function Home() {
       <main
         className={`flex h-[calc(100svh-73px)] flex-col items-center gap-10  bg-light p-24 ${inter.className}`}
       >
-        <span className="text-4xl">
+        <span className="text-4xl text-center">
           <span className="font-semibold text-blue">Sign In</span> to Vote!
         </span>
         <div className="relative items-center ">
@@ -155,8 +155,8 @@ export default function Home() {
     const res = await response.json();
     if (
       res.message ===
-        "Vote went in, check back in tomorrow to view results and we'll see you next weekend!" ||
-      res.message === "Vote went in, we'll see you again tomorrow!"
+        "Vote counted, check back in tomorrow to view results and we'll see you next weekend!" ||
+      res.message === "Vote counted, we'll see you again tomorrow!"
     ) {
       setIsVisible(true);
       createToast(res, true);
@@ -297,58 +297,72 @@ export default function Home() {
         {standings ? (
           <form
             id="form"
-            className="flex flex-col base:w-[95%] footerXM:w-[90%] md:w-[700px] bg-white py-8 px-12 rounded-lg shadow-lg"
+            className="flex flex-col base:w-[96%] footerXM:w-[90%] md:w-[700px] bg-white py-4 px-6 tableSM:py-6 tableSM:px-9 md:py-8 md:px-12 rounded-lg shadow-lg"
             onSubmit={handleVote}
           >
-            <div>
-              <TableContainer className="bg-white rounded-lg mt-8">
-                <Table variant="simple">
-                  <Thead>
-                    <Tr>
-                      <Th>Position</Th>
-                      <Th>Driver</Th>
-                      <Th>Votes</Th>
-                    </Tr>
-                  </Thead>
-                  <Tbody>
-                    {standings.map((standing: any, index: number) => {
-                      return (
-                        <Tr
-                          key={index}
-                          className={`text-3xl hover:cursor-pointer ${
-                            vote === index + 1
-                              ? "bg-orangeComp"
-                              : "hover:bg-light"
-                          }`}
-                          onClick={(e) => {
-                            setVote(index + 1);
-                            setDriver(standing.driver);
-                          }}
-                        >
-                          <Td>
-                            <span className="mr-2">{index + 1}</span>
-                          </Td>
-                          <Td>
-                            <div className="flex items-center gap-2">
-                              <Avatar
-                                size="lg"
+            <table className="bg-white table-auto ">
+              <thead>
+                <tr>
+                  <th>Position</th>
+                  <th>Driver</th>
+                  <th>Votes</th>
+                </tr>
+              </thead>
+              <tbody>
+                {standings.map((standing: any, index: number) => {
+                  return (
+                    <Fragment key={index}>
+                      <tr
+                        className={` hover:cursor-pointer py-2 row ${
+                          vote === index + 1
+                            ? "bg-orangeComp"
+                            : "hover:bg-light"
+                        }`}
+                        onClick={(e) => {
+                          setVote(index + 1);
+                          setDriver(standing.driver);
+                        }}
+                      >
+                        <td className="py-2 text-center">
+                          <span className="text-sm footerXM:text-md footerMS:text-lg md:text-xl">
+                            {index + 1}
+                          </span>
+                        </td>
+                        <td className="py-2 text-center">
+                          <div className="flex items-center justify-center gap-2 ">
+                            <div className="relative w-[32px] h-[32px] footerMS:w-[48px] footerMS:h-[48px] md:w-[64px] md:h-[64px]">
+                              <Image
+                                fill
                                 src={standing.image}
-                                name={standing.driver}
+                                alt={standing.driver}
+                                className="rounded-full"
                               />
-
-                              <span className="">{standing.driver}</span>
                             </div>
-                          </Td>
-                          <Td>
-                            <span>{standing.fan_votes.toLocaleString()}</span>
-                          </Td>
-                        </Tr>
-                      );
-                    })}
-                  </Tbody>
-                </Table>
-              </TableContainer>
-            </div>
+
+                            <span className="text-md footerXM:text-lg footerMS:text-xl md:text-2xl">
+                              {standing.driver}
+                            </span>
+                          </div>
+                        </td>
+                        <td className="py-2 text-center">
+                          <span className="text-md footerXM:text-lg footerMS:text-xl md:text-2xl ">
+                            {standing.fan_votes.toLocaleString()}
+                          </span>
+                        </td>
+                      </tr>
+                      {index !== 3 && (
+                        <tr>
+                          <td colSpan={3}>
+                            <hr className="bg-[#C3C3C3] h-[1px]"></hr>
+                          </td>
+                        </tr>
+                      )}
+                    </Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+
             {isVisible && <Confetti />}
             <div className="relative items-center mx-auto text-2xl mt-8 ">
               <motion.button

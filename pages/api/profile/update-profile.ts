@@ -31,25 +31,14 @@ export default async function handler(
     /*
     Validation:
         - Phone validation
+        
+        maybe: 
         - Phone is unique
     */
 
     const isPhoneValid = phone(phoneNumber);
     if (!isPhoneValid.isValid) {
       res.status(403).json({ message: "Phone Number format is invalid" });
-      return;
-    }
-    const result = await prisma.userInfo.findMany({
-      where: {
-        phone_number: phoneNumber,
-        NOT: {
-          email: email
-        }
-      }
-    });
-
-    if (result.length > 0) {
-      res.status(403).json({ message: "Phone Number is already in use" });
       return;
     }
 

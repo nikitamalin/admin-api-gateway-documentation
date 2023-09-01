@@ -21,6 +21,7 @@ const theme = extendTheme({
   },
   breakpoints: {
     footerXM: "402px",
+    footerMS: "580px",
     footerSM: "620px",
     sm: "640px",
     md: "768px",
