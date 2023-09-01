@@ -17,9 +17,9 @@ export default function App({
       <ChakraProvider theme={theme}>
         <ProfileContextWrapper>
           <Head>
-            <title>Voting | </title>
+            <title>Voting | Fab Four</title>
             <meta charSet="UTF-8" />
-            <meta name="application-name" content="Voting | Fab Four" />
+            <meta name="application-name" content="Fab Four Voting" />
             <meta
               name="keywords"
               content="fleet, go cariq, car iq, payments, vehicles"
