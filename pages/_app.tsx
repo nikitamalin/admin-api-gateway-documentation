@@ -7,7 +7,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Head from "next/head";
 import Navbar from "@/components/Navbar";
 import { ProfileContextWrapper } from "@/components/Context/ProfileContext";
-
+import Script from "next/script";
 export default function App({
   Component,
   pageProps: { session, ...pageProps }
@@ -46,6 +46,18 @@ export default function App({
           <Analytics />
           <Navbar />
           <Component {...pageProps} />
+          <Script
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-MY6QZ342ZC"
+          ></Script>
+          <Script id="google-analytics">
+            {`
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-MY6QZ342ZC');`}
+          </Script>
         </ProfileContextWrapper>
       </ChakraProvider>
     </SessionProvider>

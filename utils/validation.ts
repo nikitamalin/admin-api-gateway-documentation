@@ -34,10 +34,105 @@ export function isEmailValid(email: string) {
     return false;
   }
 
-  let emailList = ["bigballs@aol.com"];
+  let emailList = [
+    "bigballs@aol.com",
+    "ang10@yahoo.com",
+    "ang11@yahoo.com",
+    "ang12@yahoo.com",
+    "ang13@yahoo.com",
+    "ang14@yahoo.com",
+    "ang15@yahoo.com",
+    "ang16@yahoo.com",
+    "ang17@yahoo.com",
+    "ang18@yahoo.com",
+    "ang1@yahoo.com",
+    "ang20@yahoo.com",
+    "ang21@yahoo.com",
+    "ang22@yahoo.com",
+    "ang23@yahoo.com",
+    "ang24@yahoo.com",
+    "ang25@yahoo.com",
+    "ang26@yahoo.com",
+    "ang27@yahoo.com",
+    "ang28@yahoo.com",
+    "ang2@yahoo.com",
+    "ang30@yahoo.com",
+    "ang31@yahoo.com",
+    "ang32@yahoo.com",
+    "ang33@yahoo.com",
+    "ang34@yahoo.com",
+    "ang35@yahoo.com",
+    "ang36@yahoo.com",
+    "ang37@yahoo.com",
+    "ang38@yahoo.com",
+    "ang39@yahoo.com",
+    "ang3@yahoo.com",
+    "ang40@yahoo.com",
+    "ang41@yahoo.com",
+    "ang42@yahoo.com",
+    "ang43@yahoo.com",
+    "ang44@yahoo.com",
+    "ang45@yahoo.com",
+    "ang46@yahoo.com",
+    "ang47@yahoo.com",
+    "ang48@yahoo.com",
+    "ang49@yahoo.com",
+    "ang4@yahoo.com",
+    "ang50@yahoo.com",
+    "ang51@yahoo.com",
+    "ang52@yahoo.com",
+    "ang53@yahoo.com",
+    "ang54@yahoo.com",
+    "ang55@yahoo.com",
+    "ang56@yahoo.com",
+    "ang57@yahoo.com",
+    "ang59@yahoo.com",
+    "ang5@yahoo.com",
+    "ang60@yahoo.com",
+    "ang61@yahoo.com",
+    "ang62@yahoo.com",
+    "ang63@yahoo.com",
+    "ang64@yahoo.com",
+    "ang65@yahoo.com",
+    "ang66@yahoo.com",
+    "ang67@yahoo.com",
+    "ang68@yahoo.com",
+    "ang6@yahoo.com",
+    "ang70@yahoo.com",
+    "ang7@yahoo.com",
+    "ang8@yahoo.com",
+    "ang9@yahoo.com",
+    "ang@yahoo.com",
+    "aa.aa@aa.com",
+    "aa@aa.com",
+    "aa@aol.com",
+    "aa@onlyfans.com",
+    "aaa@aol.com",
+    "aaa@yahoo.com",
+    "aaaaa@gmail.com",
+    "aaaaaaaa@gmail.com",
+    "a@a.com",
+    "a@ao.com",
+    "a@aol.com",
+    "a@onlyfans.com",
+    "a@yahoo.com",
+    "12@yahoo.com",
+    "12machine@yahoo.com",
+    "12@yahoo.com",
+    "12machine@yahoo.com"
+  ];
 
   if (email in emailList) {
     return false;
   }
+
+  const Verifier = require("email-verifier");
+
+  let verifier = new Verifier("your_email_verification_api_key");
+  verifier.verify(email, (err: any, data: any) => {
+    if (err) throw err;
+    console.log(data);
+  });
+
   return true;
 }
