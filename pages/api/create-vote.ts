@@ -22,6 +22,7 @@ const schema = z.object({
 
 async function createVote(
   res: NextApiResponse,
+  ip: string,
   email: string,
   driver: string,
   isValid = false
@@ -31,6 +32,7 @@ async function createVote(
       data: {
         email: email,
         driver_vote: driver,
+        ip: ip,
         is_valid: isValid
       }
     });
@@ -64,11 +66,11 @@ export default async function handler(
       - is a User -> has to sign in
       - Is user's profile complete?
       - Hasn't voted today
+      - ip address log to votelog and check
       - email not in blacklisted email list 
 
       maybe
       - phone verification api
-      - ip address log to votelog and check
     */
 
     if (!driver) {
@@ -83,6 +85,11 @@ export default async function handler(
       return;
     }
 
+    var ip =
+      (req.headers["x-forwarded-for"] as string)?.split(",").shift() ||
+      req.socket?.remoteAddress ||
+      "";
+
     let isTmrwVoting = false;
     let dayOfWeek = getCaliforniaTime().getDay();
     if (dayOfWeek === 5 || dayOfWeek === 6) {
@@ -95,7 +102,7 @@ export default async function handler(
     }
 
     if (!isValidToken(event.idToken, email)) {
-      createVote(res, email, driver);
+      createVote(res, ip, email, driver);
       res.status(200).json({ message: message });
       return;
     }
@@ -110,7 +117,7 @@ export default async function handler(
     });
 
     if (!user) {
-      createVote(res, email, driver);
+      createVote(res, ip, email, driver);
       res.status(200).json({
         message: message
       });
@@ -127,10 +134,18 @@ export default async function handler(
     new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     let votedToday = await prisma.voteLog.findMany({
       where: {
-        email: email,
-        created_at: {
-          gte: time
-        }
+        OR: [
+          {
+            email: email,
+            created_at: {
+              gte: time
+            }
+          },
+          {
+            email: email,
+            ip: ip
+          }
+        ]
       }
     });
 
@@ -149,12 +164,12 @@ export default async function handler(
     }
 
     if (!isEmailValid(email)) {
-      createVote(res, email, driver);
+      createVote(res, ip, email, driver);
       res.status(200).json({ message: message });
       return;
     }
 
-    createVote(res, email, driver, true);
+    createVote(res, ip, email, driver, true);
 
     res.status(200).json({ message: message });
   } catch (error) {

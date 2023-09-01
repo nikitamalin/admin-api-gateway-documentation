@@ -26,6 +26,7 @@ model voteLog {
   driver_vote  String
   is_valid     Boolean   @default(true)
   phone_number String    @default("")
+  ip           String    @default("")
   standings    standings @relation(fields: [driver_vote], references: [driver], onDelete: NoAction, onUpdate: NoAction)
   User         userInfo  @relation(fields: [email], references: [email], onDelete: Cascade, onUpdate: NoAction)
 }
