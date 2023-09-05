@@ -131,8 +131,9 @@ export default function Home() {
     } else {
       createErrorToast(res);
     }
+    await res;
     setIsVoteLoading(false);
-    return await res;
+    return;
   }
 
   async function updateProfile(e: React.FormEvent<HTMLFormElement>) {

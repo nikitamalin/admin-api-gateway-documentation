@@ -69,7 +69,7 @@ export default async function handler(
       return;
     }
 
-    if (!isWeekendPST()) {
+    if (!isWeekendPST() && false) {
       res.status(400).json({
         message: "Voting is only allowed during the weekend California Time"
       });
