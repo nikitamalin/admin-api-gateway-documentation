@@ -30,7 +30,6 @@ import { useProfileContext } from "@/components/Context/ProfileContext";
 import Confetti from "@/components/Confetti";
 import Error from "@/components/Toast/error";
 import Success from "@/components/Toast/success";
-import bg from "@/public/bg-image.webp";
 import { useDriverContext } from "@/components/Context/DriverContext";
 export default function Home() {
   const { data: session, status } = useSession();
@@ -184,13 +183,7 @@ export default function Home() {
     <main
       className={`flex h-[calc(100svh)] brk:h-[calc(100svh-73px)] flex-col items-center  bg-black ${inter.className}`}
     >
-      <div
-        style={{
-          backgroundImage: `url(${bg.src})`,
-          width: "100%",
-          height: "100%"
-        }}
-      >
+      <div className="w-[100%] h-[100%] bg-[url('/bg-image.webp')]">
         <MobileMenu />
         <div className="flex flex-col items-center justify-center w-[100%] h-[100%]">
           {status === "unauthenticated" && (
