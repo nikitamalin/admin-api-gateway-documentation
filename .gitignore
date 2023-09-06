@@ -37,7 +37,4 @@ next-env.d.ts
 # Sentry Auth Token
 .sentryclirc
 
-public/IP2PROXY-LITE-PX11.BIN
-/IP2PROXY-LITE-PX11.BIN
 
-public
