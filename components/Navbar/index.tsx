@@ -15,13 +15,6 @@ interface Props {
 }
 
 export default function Navbar({ children }: Props) {
-  const { data: session, status } = useSession();
-  let isDriversLoading = useDriverContext().isDriversLoading;
-
-  if (status === "loading" || isDriversLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <div className="flex flex-col relative">
       <WebMenu />

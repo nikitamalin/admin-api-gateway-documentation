@@ -179,6 +179,10 @@ export default function Home() {
   }
   let response: any = {};
 
+  if (status === "loading" || isDriversLoading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <main
       className={`flex h-[calc(100svh)] brk:h-[calc(100svh-73px)] flex-col items-center  bg-black ${inter.className}`}

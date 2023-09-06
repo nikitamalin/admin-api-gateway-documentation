@@ -36,7 +36,7 @@ export default function WebMenu() {
                 </button>
               </div>
             )*/}
-        <div className="flex text-[#eaeaea] border border-1 border-orange leading-[68px] mt-[38px] mb-[29px] font-thin text-[16px] ml-auto ">
+        <div className="flex text-[#eaeaea] border border-1 border-orange leading-[68px] mt-[38px] mb-[29px] font-thin text-[16px] ml-auto z-[1500]">
           <a href="https://www.cariqfabfour.com/" className={linkStyles}>
             Standings
           </a>
