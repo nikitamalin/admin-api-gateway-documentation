@@ -24,13 +24,15 @@ import {
   ModalBody,
   ModalCloseButton
 } from "@chakra-ui/react";
+import { CgProfile } from "react-icons/cg";
+import { useProfileContext } from "@/components/Context/ProfileContext";
 import MobileMenu from "@/components/Navbar/MobileMenu";
 import { motion } from "framer-motion";
-import { useProfileContext } from "@/components/Context/ProfileContext";
 import Confetti from "@/components/Confetti";
 import Error from "@/components/Toast/error";
 import Success from "@/components/Toast/success";
 import { useDriverContext } from "@/components/Context/DriverContext";
+
 export default function Home() {
   const { data: session, status } = useSession();
   const [isSignInLoading, setIsSignInLoading] = useState(false);
@@ -39,7 +41,12 @@ export default function Home() {
   const [vote, setVote] = useState<number>(0);
   const [driver, setDriver] = useState<string>("");
   const toast = useToast();
-  let { isOpen, onOpen, onClose } = useProfileContext();
+  let { isOpen, onOpen, onClose, onToggle } = useProfileContext();
+  const {
+    isOpen: weekendIsOpen,
+    onOpen: weekendOnOpen,
+    onClose: weekendOnCloase
+  } = useDisclosure();
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -75,15 +82,27 @@ export default function Home() {
     fetchSession();
   }, [session]);
 
-  let profileURL = "";
+  let weekendURL = "/api/get-weekend";
+  const { data: isWeekend, isLoading: isWeekendLoading } = useSwr(
+    weekendURL,
+    async () => {
+      const res = await fetch(weekendURL);
+      return res.json();
+    }
+  );
+
+  let profileURL: any = null;
   if (phoneNumber && idToken) {
     profileURL = `/api/profile/get-profile?phoneNumber=${phoneNumber}&idToken=${idToken}`;
   }
 
-  const { data: profile } = useSwr(profileURL, async () => {
-    const res = await fetch(profileURL);
-    return res.json();
-  });
+  const { data: profile, isLoading: isProfileInfoLoading } = useSwr(
+    profileURL,
+    async () => {
+      const res = await fetch(profileURL);
+      return res.json();
+    }
+  );
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -91,9 +110,23 @@ export default function Home() {
     }
   }, [status, signInOnOpen]);
 
-  if (isDriversLoading) {
-    return;
-  }
+  useEffect(() => {
+    if (
+      status === "authenticated" &&
+      !isProfileInfoLoading &&
+      profile &&
+      !profile.profile_complete
+    ) {
+      onOpen();
+    }
+  }, [status, isProfileInfoLoading, onOpen, profile]);
+
+  useEffect(() => {
+    if (isWeekend && !isWeekend.isWeekend) {
+      console.log("POP UP");
+      weekendOnOpen();
+    }
+  });
 
   const createSuccessToast = (res: any, isBlue = false) => {
     toast({
@@ -179,13 +212,19 @@ export default function Home() {
   }
   let response: any = {};
 
-  if (status === "loading" || isDriversLoading) {
+  if (
+    status === "loading" ||
+    isDriversLoading ||
+    isProfileInfoLoading ||
+    isWeekendLoading ||
+    (!phoneNumber && status === "authenticated")
+  ) {
     return <LoadingSpinner />;
   }
 
   return (
     <main
-      className={`flex h-[calc(100svh)] brk:h-[calc(100svh-73px)] flex-col items-center  bg-black ${inter.className}`}
+      className={`flex h-[calc(100svh)] brk:h-[calc(100svh-137px)] flex-col items-center  bg-black ${inter.className}`}
     >
       <div className="w-[100%] h-[100%] bg-[url('/bg-image.png')]">
         <MobileMenu />
@@ -336,7 +375,18 @@ export default function Home() {
               </ModalContent>
             </Modal>
           )}
-
+          {status === "authenticated" && (
+            <div>
+              <button
+                className="mb-8"
+                onClick={() => {
+                  onToggle();
+                }}
+              >
+                <CgProfile size="48" className="text-orange" />
+              </button>
+            </div>
+          )}
           <form
             id="form"
             className="flex flex-col base:w-[96%] footerXM:w-[90%] md:w-[700px] bg-white py-4 px-6 tableSM:py-6 tableSM:px-9 md:py-8 md:px-12 rounded-lg shadow-lg"
@@ -432,6 +482,32 @@ export default function Home() {
           </form>
         </div>
       </div>
+      <Modal isOpen={weekendIsOpen} onClose={fakeClose} isCentered>
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
+        <ModalContent>
+          <ModalBody>
+            <div className="flex flex-col items-center p-10">
+              <div
+                className="relative
+			w-[66px] h-[66px] 
+			footerSM:w-[100px] footerSM:h-[100px] 
+			md:w-[120px] md:h-[120px] "
+              >
+                <Image src="/fab4_logo.png" alt="Logo" fill />
+              </div>
+              <span className="text-4xl text-center mt-5">
+                The Fab Four fan vote will be back soon!
+              </span>
+              <span className="text-center mt-2">
+                Unfortunately, fan voting is currently closed. Be sure to come
+                back every Friday - Sunday so you don&apos;t miss your chance to
+                be part of the action and enter for your chance to win the
+                Turkey Night Sweepstakes.
+              </span>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </main>
   );
 }

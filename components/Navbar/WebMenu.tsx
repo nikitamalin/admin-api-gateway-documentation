@@ -1,12 +1,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { ReactNode } from "react";
-
+import { signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
+import { Spinner } from "@chakra-ui/react";
+import { CgProfile } from "react-icons/cg";
+import { useProfileContext } from "../Context/ProfileContext";
+import { useDriverContext } from "../Context/DriverContext";
+import LoadingSpinner from "@/components/LoadingSpinner";
 interface Props {
   children?: ReactNode;
 }
 
 export default function WebMenu() {
+  const { data: session, status } = useSession();
+  let onToggle = useProfileContext().onToggle;
   let linkStyles =
     "px-[27px] hover:bg-white hover:text-black cursor-pointer font-arial font-normal transition hover:ease-in hover:transition-200 ";
 
@@ -24,18 +32,7 @@ export default function WebMenu() {
             alt="CarIQ"
           ></Image>
         </a>
-        {/*status === "authenticated" && (
-              <div>
-                <button
-                  className="flex items-center mr-4 footerXM:mr-0"
-                  onClick={() => {
-                    onToggle();
-                  }}
-                >
-                  <CgProfile size="32" className="text-orange" />
-                </button>
-              </div>
-            )*/}
+
         <div className="flex text-[#eaeaea] border border-1 border-orange leading-[68px] mt-[38px] mb-[29px] font-thin text-[16px] ml-auto z-[1500]">
           <a href="https://www.cariqfabfour.com/" className={linkStyles}>
             Standings

@@ -147,14 +147,12 @@ export default async function handler(
     });
 
     if (votedToday.length !== 0) {
-      console.log("VOTED: ", votedToday);
       let isValid = true;
       votedToday.forEach((record) => {
         if (record.ip === ip) {
           isValid = false;
         }
       });
-      console.log("IS VALID: ", isValid);
 
       res.status(200).json({
         message: alreadyVoted
