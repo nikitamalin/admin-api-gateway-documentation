@@ -18,7 +18,7 @@ export default function WebMenu() {
           className="absolute mt-[13px] left-[-35px] ml-[calc((100%-980px)/2)] outline-none"
         >
           <Image
-            src="/fab4_nav.webp"
+            src="/fab4_nav.png"
             width="241"
             height="181"
             alt="CarIQ"

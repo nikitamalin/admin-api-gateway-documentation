@@ -183,7 +183,7 @@ export default function Home() {
     <main
       className={`flex h-[calc(100svh)] brk:h-[calc(100svh-73px)] flex-col items-center  bg-black ${inter.className}`}
     >
-      <div className="w-[100%] h-[100%] bg-[url('/bg-image.webp')]">
+      <div className="w-[100%] h-[100%] bg-[url('/bg-image.png')]">
         <MobileMenu />
         <div className="flex flex-col items-center justify-center w-[100%] h-[100%]">
           {status === "unauthenticated" && (
