@@ -51,6 +51,7 @@ const config: Config = {
       md: "768px",
       nav: "850px",
       ml: "896px",
+      brk: "980px",
       lg: "1024px",
       jobs: "1180px",
       xl: "1280px",

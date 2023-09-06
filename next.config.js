@@ -14,7 +14,6 @@ const nextConfig = {
 
 module.exports = nextConfig;
 
-
 // Injected content via Sentry wizard below
 
 const { withSentryConfig } = require("@sentry/nextjs");
@@ -29,7 +28,7 @@ module.exports = withSentryConfig(
     silent: true,
 
     org: "fab-4",
-    project: "javascript-nextjs",
+    project: "javascript-nextjs"
   },
   {
     // For all available options, see:
@@ -48,6 +47,6 @@ module.exports = withSentryConfig(
     hideSourceMaps: true,
 
     // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
+    disableLogger: true
   }
 );
