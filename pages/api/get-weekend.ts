@@ -10,7 +10,7 @@ export default async function handler(
     return;
   }
   try {
-    if (!isWeekendPST() && false) {
+    if (!isWeekendPST()) {
       res.status(200).json({
         isWeekend: false
       });
