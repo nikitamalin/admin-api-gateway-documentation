@@ -21,6 +21,7 @@
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
     "framer-motion": "^10.16.2",
+    "geoip-lite": "^1.4.7",
     "ip2proxy-nodejs": "^4.3.0",
     "jsonwebtoken": "^9.0.2",
     "next": "13.4.19",
@@ -36,6 +37,7 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
+    "@types/geoip-lite": "^1.4.1",
     "prisma": "^5.2.0"
   }
 }

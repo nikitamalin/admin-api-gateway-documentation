@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
 import useSwr from "swr";
 import { useState, useEffect, Fragment } from "react";
@@ -38,6 +38,7 @@ export default function Home() {
   const [isSignInLoading, setIsSignInLoading] = useState(false);
   const [isVoteLoading, setIsVoteLoading] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [vote, setVote] = useState<number>(0);
   const [driver, setDriver] = useState<string>("");
   const toast = useToast();
@@ -47,6 +48,8 @@ export default function Home() {
     onOpen: weekendOnOpen,
     onClose: weekendOnCloase
   } = useDisclosure();
+  const { isOpen: EUIsOpen, onOpen: EUOnOpen } = useDisclosure();
+
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [phoneNumber, setPhoneNumber] = useState<string>("");
@@ -122,9 +125,14 @@ export default function Home() {
   }, [status, isProfileInfoLoading, onOpen, profile]);
 
   useEffect(() => {
-    if (isWeekend && !isWeekend.isWeekend) {
-      console.log("POP UP");
+    if (isWeekend && !isWeekend.isWeekend && !("isEU" in isWeekend)) {
       weekendOnOpen();
+    }
+  });
+
+  useEffect(() => {
+    if (isWeekend && "isEU" in isWeekend) {
+      EUOnOpen();
     }
   });
 
@@ -166,6 +174,29 @@ export default function Home() {
     }
     await res;
     setIsVoteLoading(false);
+    return;
+  }
+
+  async function deleteAccount(e: any) {
+    e.preventDefault();
+    setIsDeleteLoading(true);
+
+    const response = await fetch("/api/profile/delete-account", {
+      method: "POST",
+      body: JSON.stringify({
+        phoneNumber: phoneNumber,
+        idToken: idToken
+      })
+    });
+    const res = await response.json();
+    await res;
+    if (res.message !== "Success") {
+      res.message = "Sorry, we couldn't delete your account. Please try again.";
+      createErrorToast(res);
+    } else {
+      signOut({ callbackUrl: "/" });
+    }
+    setIsDeleteLoading(false);
     return;
   }
 
@@ -343,32 +374,64 @@ export default function Home() {
                       <option>43-65</option>
                       <option>65+</option>
                     </select>
-
-                    <div className="relative items-center mx-auto text-2xl mt-8 ">
-                      <motion.button
-                        type="submit"
-                        value="Send"
-                        whileHover={{
-                          scale: 1.04,
-                          transition: { duration: 0.1 }
-                        }}
-                        whileTap={{
-                          scale: 0.98,
-                          transition: { duration: 0.1 }
-                        }}
-                        className={`flex bg-orange text-white rounded-full cursor-pointer transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                          isProfileLoading
-                            ? "opacity-0 pointer-events-none"
-                            : ""
-                        }`}
-                      >
-                        Save
-                      </motion.button>
-                      {isProfileLoading && (
-                        <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
-                          <Spinner size="md" color="white" />
-                        </div>
-                      )}
+                    <div className="flex flex-wrap mt-10 gap-5">
+                      <div className="relative items-center mx-auto text-2xl  ">
+                        <motion.button
+                          type="submit"
+                          value="Send"
+                          whileHover={{
+                            scale: 1.04,
+                            transition: { duration: 0.1 }
+                          }}
+                          whileTap={{
+                            scale: 0.98,
+                            transition: { duration: 0.1 }
+                          }}
+                          className={`flex bg-orange text-white rounded-full cursor-pointer transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
+                            isProfileLoading
+                              ? "opacity-0 pointer-events-none"
+                              : ""
+                          }`}
+                          disabled={isProfileLoading}
+                        >
+                          Save
+                        </motion.button>
+                        {isProfileLoading && (
+                          <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
+                            <Spinner size="md" color="white" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="relative items-center mx-auto text-2xl">
+                        <motion.button
+                          type="button"
+                          onClick={(e) => {
+                            console.log("here");
+                            deleteAccount(e);
+                          }}
+                          whileHover={{
+                            scale: 1.04,
+                            transition: { duration: 0.1 }
+                          }}
+                          whileTap={{
+                            scale: 0.98,
+                            transition: { duration: 0.1 }
+                          }}
+                          className={`flex bg-orange text-white rounded-full cursor-pointer transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
+                            isDeleteLoading
+                              ? "opacity-0 pointer-events-none"
+                              : ""
+                          }`}
+                          disabled={isDeleteLoading}
+                        >
+                          Delete Account
+                        </motion.button>
+                        {isDeleteLoading && (
+                          <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
+                            <Spinner size="md" color="white" />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </form>
                 </ModalBody>
@@ -503,6 +566,27 @@ export default function Home() {
                 back every Friday - Sunday so you don&apos;t miss your chance to
                 be part of the action and enter for your chance to win the
                 Turkey Night Sweepstakes.
+              </span>
+            </div>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={EUIsOpen} onClose={fakeClose} isCentered>
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
+        <ModalContent>
+          <ModalBody>
+            <div className="flex flex-col items-center p-5">
+              <div
+                className="relative
+			w-[66px] h-[66px] 
+			footerSM:w-[100px] footerSM:h-[100px] 
+			md:w-[120px] md:h-[120px] "
+              >
+                <Image src="/fab4_logo.png" alt="Logo" fill />
+              </div>
+              <span className="text-4xl text-center mt-5 mb-36">
+                Sorry, we are not allowing members of the EU to vote at the
+                moment.
               </span>
             </div>
           </ModalBody>
