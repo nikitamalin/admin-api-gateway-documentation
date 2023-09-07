@@ -20,6 +20,7 @@
     "autoprefixer": "10.4.15",
     "eslint": "8.48.0",
     "eslint-config-next": "13.4.19",
+    "fast-geoip": "^1.1.88",
     "framer-motion": "^10.16.2",
     "geoip-lite": "^1.4.7",
     "ip2proxy-nodejs": "^4.3.0",

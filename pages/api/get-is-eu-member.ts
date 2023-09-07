@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import geoip from "geoip-lite";
+import geoip from "fast-geoip";
+// import path from "path";
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -14,12 +16,14 @@ export default async function handler(
       (req.headers["x-forwarded-for"] as string)?.split(",").shift() ||
       req.socket?.remoteAddress ||
       "";
-    const isEU = (ip: any) => {
+    const isEU = async (ip: any) => {
       // ip = "3.253.189.1";
-      const geo = geoip.lookup(ip);
+      // console.log(ip);
+      const geo = await geoip.lookup(ip);
+      // console.log(geo);
       return geo && geo.eu === "1";
     };
-    if (isEU(ip)) {
+    if (await isEU(ip)) {
       res.status(200).json({ isEU: true });
     } else {
       res.status(200).json({ isEU: false });
