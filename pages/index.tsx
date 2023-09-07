@@ -94,6 +94,12 @@ export default function Home() {
     }
   );
 
+  let EUURL = "/api/get-is-eu-member";
+  const { data: isEU, isLoading: isEULoading } = useSwr(EUURL, async () => {
+    const res = await fetch(EUURL);
+    return res.json();
+  });
+
   let profileURL: any = null;
   if (phoneNumber && idToken) {
     profileURL = `/api/profile/get-profile?phoneNumber=${phoneNumber}&idToken=${idToken}`;
@@ -125,16 +131,16 @@ export default function Home() {
   }, [status, isProfileInfoLoading, onOpen, profile]);
 
   useEffect(() => {
-    if (isWeekend && !isWeekend.isWeekend && !("isEU" in isWeekend)) {
+    if (isWeekend && !isWeekend.isWeekend) {
       weekendOnOpen();
     }
-  });
+  }, [isWeekend, weekendOnOpen]);
 
   useEffect(() => {
-    if (isWeekend && "isEU" in isWeekend) {
+    if (isEU && isEU.isEU) {
       EUOnOpen();
     }
-  });
+  }, [isEU, EUOnOpen]);
 
   const createSuccessToast = (res: any, isBlue = false) => {
     toast({
