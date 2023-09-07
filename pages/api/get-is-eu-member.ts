@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import geoip from "fast-geoip";
+import { IP2Proxy } from "ip2proxy-nodejs";
 // import path from "path";
 
 export default async function handler(
@@ -17,10 +18,7 @@ export default async function handler(
       req.socket?.remoteAddress ||
       "";
     const isEU = async (ip: any) => {
-      // ip = "3.253.189.1";
-      // console.log(ip);
       const geo = await geoip.lookup(ip);
-      // console.log(geo);
       return geo && geo.eu === "1";
     };
     if (await isEU(ip)) {

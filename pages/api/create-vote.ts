@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/client";
 import { z, ZodError } from "zod";
-import { IP2Proxy } from "ip2proxy-nodejs";
+
 import { isValidToken } from "@/utils/auth";
 import { isWeekendPST, dstOffset, getCaliforniaTime } from "@/utils/validation";
 

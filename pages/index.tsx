@@ -412,7 +412,6 @@ export default function Home() {
                         <motion.button
                           type="button"
                           onClick={(e) => {
-                            console.log("here");
                             deleteAccount(e);
                           }}
                           whileHover={{
