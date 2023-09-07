@@ -362,6 +362,9 @@ export default function Home() {
                       onChange={(e) => setGender(e.target.value)}
                       className={inputStyles}
                     >
+                      <option value="" disabled>
+                        Select a value
+                      </option>
                       <option>Female</option>
                       <option>Male</option>
                       <option>Other</option>
@@ -374,6 +377,9 @@ export default function Home() {
                       onChange={(e) => setAge(e.target.value)}
                       className={inputStyles}
                     >
+                      <option value="" disabled>
+                        Select an age range
+                      </option>
                       <option>0-14</option>
                       <option>15-24</option>
                       <option>25-42</option>

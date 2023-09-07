@@ -50,11 +50,11 @@ export default async function handler(
     Validation check:
       - Selected a driver
       - It's the weekend
-      - Validate jwt
-      - is a User -> has to sign in
-      - Is user's profile complete?
+      - Validate jwt (user's signed in)
+      - is a User -> (has signed in, not a bot)
+      - Is user's profile complete? 
       - Hasn't voted today
-      - ip address not used today -> already voted better return than vote went in
+      - ip address not used today (only 1 vote/day per ip address)
       - ip adderss not a proxy
 
 
@@ -153,7 +153,9 @@ export default async function handler(
           isValid = false;
         }
       });
-
+      if (!isValid) {
+        createVote(res, ip, phoneNumber, driver, false);
+      }
       res.status(200).json({
         message: alreadyVoted
       });
