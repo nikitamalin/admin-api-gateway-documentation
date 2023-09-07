@@ -88,22 +88,28 @@ export default function MobileDrawer({
         bg="#f7f7f7"
       >
         <DrawerBody p={0} className="flex flex-col mt-[95px] gap-10">
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a
+            href="https://www.cariqfabfour.com/standings"
+            className={linkStyles}
+          >
             Standings
           </a>
           <Link href="/" className={`text-[#d33303] ${linkStyles}`}>
             Vote
           </Link>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a href="https://www.cariqfabfour.com/drivers" className={linkStyles}>
             Drivers
           </a>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a href="https://www.cariqfabfour.com/news" className={linkStyles}>
             News
           </a>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a href="https://www.cariqfabfour.com/about" className={linkStyles}>
             About
           </a>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a
+            href="https://www.cariqfabfour.com/lead-collection"
+            className={linkStyles}
+          >
             Car IQ Pay
           </a>
         </DrawerBody>

@@ -263,9 +263,9 @@ export default function Home() {
     <main
       className={`flex h-[calc(100svh)] brk:h-[calc(100svh-137px)] flex-col items-center  bg-black ${inter.className}`}
     >
-      <div className="w-[100%] h-[100%] bg-[url('/bg-image.png')]">
+      <div className="w-[100%] h-[100svh] bg-[url('/bg-image.png')]">
         <MobileMenu />
-        <div className="flex flex-col items-center justify-center w-[100%] h-[100%]">
+        <div className="flex flex-col items-center justify-center w-[100%] h-[calc(100%-68px)] brk:h-[100%]">
           {status === "unauthenticated" && (
             <Modal isOpen={true} onClose={fakeClose} isCentered>
               <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />

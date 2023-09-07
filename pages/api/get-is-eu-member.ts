@@ -15,7 +15,7 @@ export default async function handler(
       req.socket?.remoteAddress ||
       "";
     const isEU = (ip: any) => {
-      ip = "3.253.189.1";
+      // ip = "3.253.189.1";
       const geo = geoip.lookup(ip);
       return geo && geo.eu === "1";
     };

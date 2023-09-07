@@ -34,22 +34,28 @@ export default function WebMenu() {
         </a>
 
         <div className="flex text-[#eaeaea] border border-1 border-orange leading-[68px] mt-[38px] mb-[29px] font-thin text-[16px] ml-auto z-[1500]">
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a
+            href="https://www.cariqfabfour.com/standings"
+            className={linkStyles}
+          >
             Standings
           </a>
           <Link href="/" className={`bg-white text-black ${linkStyles}`}>
             Vote
           </Link>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a href="https://www.cariqfabfour.com/drivers" className={linkStyles}>
             Drivers
           </a>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a href="https://www.cariqfabfour.com/news" className={linkStyles}>
             News
           </a>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a href="https://www.cariqfabfour.com/about" className={linkStyles}>
             About
           </a>
-          <a href="https://www.cariqfabfour.com/" className={linkStyles}>
+          <a
+            href="https://www.cariqfabfour.com/lead-collection"
+            className={linkStyles}
+          >
             Car IQ Pay
           </a>
         </div>
