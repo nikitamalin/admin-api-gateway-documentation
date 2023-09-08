@@ -22,10 +22,10 @@ export function isWeekendPST() {
   // PST the rest - 8 hours behind
 
   console.log("california: ", getCaliforniaTime());
-  console.log("day of week: ", getCaliforniaTime().getTime());
+  console.log("day of week: ", getCaliforniaTime().getUTCDay());
   return true;
 
-  const dayOfWeek = getCaliforniaTime().getTime();
+  const dayOfWeek = getCaliforniaTime().getUTCDay();
   return dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
 }
 
