@@ -171,6 +171,7 @@ export default async function handler(
           "ip address voted today"
         );
       }
+
       res.status(200).json({
         message: alreadyVoted
       });
