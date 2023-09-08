@@ -1,6 +1,13 @@
 export function dstOffset() {
   let d = new Date();
   let jan = new Date(d.getFullYear(), 0, 1).getTimezoneOffset();
+  console.log("\ntimezone");
+  console.log("full year: ", new Date(d.getFullYear(), 0, 1));
+  console.log(
+    "timezone offset: ",
+    new Date(d.getFullYear(), 0, 1).getTimezoneOffset()
+  );
+  console.log("offset: ", d.getTimezoneOffset());
   let isDst = false;
   if (jan === d.getTimezoneOffset()) {
     isDst = true;
