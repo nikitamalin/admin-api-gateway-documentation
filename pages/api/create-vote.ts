@@ -130,8 +130,7 @@ export default async function handler(
     time.setHours(0, 0, 0, 0);
     new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     console.log("\n\nVote");
-    console.log("time: ", time);
-    console.log("get time: ", time.getTime());
+    console.log("UTC 0 time for california: ", time);
     console.log("offset: ", dstOffset());
     console.log(
       "new date: ",
