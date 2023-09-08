@@ -11,12 +11,6 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   useToast,
   Spinner,
-  AlertDescription,
-  Alert,
-  AlertIcon,
-  chakra,
-  CloseButton,
-  AlertTitle,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -578,6 +572,7 @@ export default function Home() {
                 be part of the action and enter for your chance to win the
                 Turkey Night Sweepstakes.
               </span>
+              <button></button>
             </div>
           </ModalBody>
         </ModalContent>
@@ -599,6 +594,7 @@ export default function Home() {
                 Sorry, we are not allowing members of the EU to vote at the
                 moment.
               </span>
+              <button></button>
             </div>
           </ModalBody>
         </ModalContent>

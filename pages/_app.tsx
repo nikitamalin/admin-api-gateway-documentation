@@ -9,6 +9,7 @@ import Navbar from "@/components/Navbar";
 import { ProfileContextWrapper } from "@/components/Context/ProfileContext";
 import { DriverContextWrapper } from "@/components/Context/DriverContext";
 import Script from "next/script";
+
 export default function App({
   Component,
   pageProps: { session, ...pageProps }
