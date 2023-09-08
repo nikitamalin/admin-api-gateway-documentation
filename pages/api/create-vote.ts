@@ -127,15 +127,12 @@ export default async function handler(
     }
 
     const time = new Date(); // confirmed UTC time
-    time.setHours(0, 0, 0, 0);
-    new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
+    time.setHours(dstOffset(), 0, 0, 0);
+    // new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     console.log("\n\nVote");
     console.log("UTC 0 time for california: ", time);
     console.log("offset: ", dstOffset());
-    console.log(
-      "new date: ",
-      new Date(time.getTime() - dstOffset() * 60 * 60 * 1000)
-    );
+
     let votedToday = await prisma.voteLog.findMany({
       where: {
         OR: [
