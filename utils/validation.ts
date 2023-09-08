@@ -1,5 +1,4 @@
 export function dstOffset() {
-  return 6;
   let d = new Date();
   let jan = new Date(d.getFullYear(), 0, 1).getTimezoneOffset();
   let isDst = false;
@@ -22,11 +21,11 @@ export function isWeekendPST() {
   // PDT 2nd Sunday March to 1st Sunday Nov - 7 hours behind
   // PST the rest - 8 hours behind
 
+  console.log("\n\nIs Weekend");
   console.log("DATE: ", new Date());
 
   console.log("california: ", getCaliforniaTime());
   console.log("day of week: ", getCaliforniaTime().getUTCDay());
-  return true;
 
   const dayOfWeek = getCaliforniaTime().getUTCDay();
   return dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
