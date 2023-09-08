@@ -128,7 +128,6 @@ export default async function handler(
 
     const time = new Date();
     time.setHours(0, 0, 0, 0);
-    ip = "172.56.208.193";
     new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     let votedToday = await prisma.voteLog.findMany({
       where: {
@@ -137,27 +136,27 @@ export default async function handler(
             phone_number: phoneNumber,
             created_at: {
               gte: time
-            }
+            },
+            is_valid: true
           },
           {
             created_at: {
               gte: time
             },
-            ip: ip
+            ip: ip,
+            is_valid: true
           }
         ]
       }
     });
 
     if (votedToday.length !== 0) {
-      let isValid = true;
-
+      let isValid = false;
       votedToday.forEach((record) => {
         if (record.phone_number === phoneNumber) {
           isValid = true;
-          return;
         }
-        if (record.ip === ip) {
+        if (record.ip === ip && !isValid) {
           isValid = false;
         }
       });
