@@ -21,6 +21,8 @@ export function isWeekendPST() {
   // PDT 2nd Sunday March to 1st Sunday Nov - 7 hours behind
   // PST the rest - 8 hours behind
 
+  console.log("DATE: ", new Date());
+
   console.log("california: ", getCaliforniaTime());
   console.log("day of week: ", getCaliforniaTime().getUTCDay());
   return true;
