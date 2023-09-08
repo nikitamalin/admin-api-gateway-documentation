@@ -20,7 +20,7 @@ export default function App({
         <ProfileContextWrapper>
           <DriverContextWrapper>
             <Head>
-              <title>Voting | Fab Four</title>
+              <title>Vote | Fabfour</title>
               <meta charSet="UTF-8" />
               <meta name="application-name" content="Fab Four Voting" />
               <meta
@@ -39,7 +39,7 @@ export default function App({
               />
               <link
                 rel="shortcut icon"
-                href="/favicon.png"
+                href="/pfavico.ico"
                 type="image/x-icon"
               />
               <meta property="og:title" content="Car IQ Pay" />
