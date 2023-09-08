@@ -26,6 +26,7 @@ model voteLog {
   is_valid     Boolean   @default(true)
   phone_number String    @default("")
   ip           String    @default("")
+  error        String    @default("")
   standings    standings @relation(fields: [driver_vote], references: [driver], onDelete: NoAction, onUpdate: NoAction)
 }
 

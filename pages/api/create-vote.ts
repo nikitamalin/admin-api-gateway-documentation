@@ -16,7 +16,8 @@ async function createVote(
   ip: string,
   phoneNumber: string,
   driver: string,
-  isValid = false
+  isValid = true,
+  error = ""
 ) {
   try {
     let result = await prisma.voteLog.create({
@@ -24,7 +25,8 @@ async function createVote(
         phone_number: phoneNumber,
         driver_vote: driver,
         ip: ip,
-        is_valid: isValid
+        is_valid: isValid,
+        error: error
       }
     });
   } catch (err) {
@@ -97,7 +99,7 @@ export default async function handler(
     }
 
     if (!isValidToken(event.idToken, phoneNumber)) {
-      createVote(res, ip, phoneNumber, driver);
+      createVote(res, ip, phoneNumber, driver, false, "token not valid");
       res.status(200).json({ message: alreadyVoted });
       return;
     }
@@ -112,7 +114,7 @@ export default async function handler(
     });
 
     if (!user) {
-      createVote(res, ip, phoneNumber, driver);
+      createVote(res, ip, phoneNumber, driver, false, "not a logged in user");
       res.status(200).json({
         message: alreadyVoted
       });
@@ -126,6 +128,7 @@ export default async function handler(
 
     const time = new Date();
     time.setHours(0, 0, 0, 0);
+    ip = "172.56.208.193";
     new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     let votedToday = await prisma.voteLog.findMany({
       where: {
@@ -148,13 +151,26 @@ export default async function handler(
 
     if (votedToday.length !== 0) {
       let isValid = true;
+
       votedToday.forEach((record) => {
+        if (record.phone_number === phoneNumber) {
+          isValid = true;
+          return;
+        }
         if (record.ip === ip) {
           isValid = false;
         }
       });
+
       if (!isValid) {
-        createVote(res, ip, phoneNumber, driver, false);
+        createVote(
+          res,
+          ip,
+          phoneNumber,
+          driver,
+          false,
+          "ip address voted today"
+        );
       }
       res.status(200).json({
         message: alreadyVoted
@@ -162,7 +178,7 @@ export default async function handler(
       return;
     }
 
-    createVote(res, ip, phoneNumber, driver, true);
+    createVote(res, ip, phoneNumber, driver);
 
     res.status(200).json({ message: message });
   } catch (error) {
