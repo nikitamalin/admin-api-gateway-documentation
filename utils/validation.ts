@@ -1,5 +1,6 @@
 export function dstOffset() {
   return 7;
+  // doesn't properly return in vercel
   let d = new Date();
   let jan = new Date(d.getFullYear(), 0, 1).getTimezoneOffset();
   console.log("\ntimezone");
@@ -34,6 +35,15 @@ export function isWeekendPST() {
 
   console.log("california: ", getCaliforniaTime());
   console.log("day of week: ", getCaliforniaTime().getUTCDay());
+
+  console.log(
+    "DAY OF WEEK (4): ",
+    new Date("2023-09-08T00:05:26.390Z").getDay()
+  );
+  console.log(
+    "DAY OF WEEK (5): ",
+    new Date("2023-09-08T00:05:26.390Z").getUTCDay()
+  );
 
   const dayOfWeek = getCaliforniaTime().getUTCDay();
   return dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
