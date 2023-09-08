@@ -30,21 +30,6 @@ export function isWeekendPST() {
   // PDT 2nd Sunday March to 1st Sunday Nov - 7 hours behind
   // PST the rest - 8 hours behind
 
-  console.log("\n\nIs Weekend");
-  console.log("UTC DATE: ", new Date());
-
-  console.log("california: ", getCaliforniaTime());
-  console.log("day of week: ", getCaliforniaTime().getUTCDay());
-
-  console.log(
-    "DAY OF WEEK (4): ",
-    new Date("2023-09-08T00:05:26.390Z").getDay()
-  );
-  console.log(
-    "DAY OF WEEK (5): ",
-    new Date("2023-09-08T00:05:26.390Z").getUTCDay()
-  );
-
   const dayOfWeek = getCaliforniaTime().getUTCDay();
   return dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0;
 }
