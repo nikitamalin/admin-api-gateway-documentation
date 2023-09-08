@@ -129,6 +129,13 @@ export default async function handler(
     const time = new Date();
     time.setHours(0, 0, 0, 0);
     new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
+    console.log("time: ", time);
+    console.log("get time: ", time.getTime());
+    console.log("offset: ", dstOffset());
+    console.log(
+      "new date: ",
+      new Date(time.getTime() - dstOffset() * 60 * 60 * 1000)
+    );
     let votedToday = await prisma.voteLog.findMany({
       where: {
         OR: [

@@ -19,7 +19,6 @@ export default async function handler(
         isWeekend: true
       });
     }
-    return;
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }

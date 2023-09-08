@@ -1,4 +1,5 @@
 export function dstOffset() {
+  return 6;
   let d = new Date();
   let jan = new Date(d.getFullYear(), 0, 1).getTimezoneOffset();
   let isDst = false;
