@@ -127,7 +127,11 @@ export default async function handler(
     }
 
     const time = new Date(); // confirmed UTC time
-    time.setHours(dstOffset(), 0, 0, 0);
+    let x = time;
+    time.setHours(0, 0, 0, 0);
+    x.setHours(dstOffset(), 0, 0, 0);
+    console.log("TIME: ", time);
+    console.log("DST OFFSET: ", x);
     // new Date(time.getTime() - dstOffset() * 60 * 60 * 1000);
     // console.log("UTC 0 time for california: ", time);
 
