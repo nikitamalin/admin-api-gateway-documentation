@@ -128,6 +128,9 @@ export default async function handler(
 
     const time = new Date(); // confirmed UTC time
     let x = time;
+    if (time.getHours() >= 0 && time.getHours() < 7) {
+      time.setDate(time.getDate() - 1);
+    }
     time.setHours(0, 0, 0, 0);
     x.setHours(dstOffset(), 0, 0, 0);
     console.log("TIME: ", time);
