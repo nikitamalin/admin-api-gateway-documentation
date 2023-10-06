@@ -261,7 +261,7 @@ export default function Home() {
         <MobileMenu />
         <div className="flex flex-col items-center justify-center w-[100%] h-[calc(100%-68px)] brk:h-[100%]">
           {status === "unauthenticated" && (
-            <Modal isOpen={true} onClose={fakeClose} isCentered>
+            <Modal isOpen={false /*true*/} onClose={fakeClose} isCentered>
               <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
               <ModalContent>
                 <ModalBody>
@@ -316,7 +316,7 @@ export default function Home() {
             </Modal>
           )}
           {status === "authenticated" && (
-            <Modal isOpen={isOpen} onClose={onClose} isCentered>
+            <Modal isOpen={/*isOpen*/ false} onClose={onClose} isCentered>
               <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
               <ModalContent>
                 <ModalCloseButton />
@@ -550,7 +550,7 @@ export default function Home() {
           </form>
         </div>
       </div>
-      <Modal isOpen={weekendIsOpen} onClose={fakeClose} isCentered>
+      <Modal isOpen={true /*weekendIsOpen*/} onClose={fakeClose} isCentered>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
         <ModalContent>
           <ModalBody>
@@ -564,13 +564,17 @@ export default function Home() {
                 <Image src="/fab4_logo.png" alt="Logo" fill />
               </div>
               <span className="text-4xl text-center mt-5">
-                The Fab Four fan vote will be back soon!
+                {/* The Fab Four fan vote will be back soon! */}
+                The Fab Four fan vote is closed.
               </span>
               <span className="text-center mt-2">
-                Unfortunately, fan voting is currently closed. Be sure to come
+                Unfortunately, fan voting is now closed. We will see you back
+                here next season!
+                {/* Unfortunately, fan voting is currently closed. */}
+                {/*Be sure to come
                 back every Friday - Sunday so you don&apos;t miss your chance to
                 be part of the action and enter for your chance to win the
-                Turkey Night Sweepstakes.
+                Turkey Night Sweepstakes.*/}
               </span>
               <button></button>
             </div>
