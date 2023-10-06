@@ -39,7 +39,7 @@ export default function App({
               />
               <link
                 rel="shortcut icon"
-                href="/pfavico.ico"
+                href="/favico.ico"
                 type="image/x-icon"
               />
               <meta property="og:title" content="Car IQ Pay" />
