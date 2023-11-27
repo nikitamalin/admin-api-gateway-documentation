@@ -32,7 +32,6 @@ export default function MainLayout({ children }: Props) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" type="image/x-icon" href="favicon.png" />
         <link rel="stylesheet" href="https://rsms.me/inter/inter.css"></link>
-        <script defer src="javascripts/spectaql.min.js"></script>
         {/* <title>Vote | Fabfour</title>
           <meta charSet="UTF-8" />
           <meta name="application-name" content="Fab Four Voting" />
