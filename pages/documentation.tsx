@@ -36,11 +36,15 @@ export default function Doc() {
   return (
     <div className="relative">
       {loading && (
-        <div className="absolute inset-0 bg-gray-200 opacity-75 flex items-center justify-center">
-          Loading...
+        <div className="absolute inset-0 flex items-center justify-center z-[50] ">
+          <LoadingSpinner />;
         </div>
       )}
-      <iframe src={url} className="h-[100vh] w-full" onLoad={handleLoad} />
+      <iframe
+        src={url}
+        className="h-[100vh] w-full z-[1500]"
+        onLoad={handleLoad}
+      />
     </div>
   );
 }
