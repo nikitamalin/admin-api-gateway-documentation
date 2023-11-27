@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "u": "node utils/add-spectaql-examples.js",
     "createDocLimit": "node script.js && npm run u"
   },
   "dependencies": {
