@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useIframeContext } from "@/components/Context/iframe";
 /*
 export async function getStaticProps() &#123;
