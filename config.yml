@@ -3,8 +3,8 @@ spectaql:
   # Optional Boolean indicating whether to omit the HTML <body/> and generate the documentation content only
   # Default: false
   embeddable: true
-  oneFile: false
-  targetDir: ./src/assets
+  oneFile: true
+  targetDir: ./private
   logoUrl: https://res.cloudinary.com/dpibqp4rk/image/upload/v1693529188/CarIQ-Pay-RGB-Spacing-Final_vseszs.png
   logoHeightPx: 40
   scrollPaddingTopPx: 0

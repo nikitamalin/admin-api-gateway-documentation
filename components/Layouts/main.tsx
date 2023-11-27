@@ -1,6 +1,6 @@
 import Head from "next/head";
 import React, { ReactNode } from "react";
-import { signOut, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import LoadingSpinner from "@/components/Auth/LoadingSpinner";
 import Unauthenticated from "../Auth/Unauthenticated";
 

@@ -1,7 +1,7 @@
 const fs = require("fs");
 
 // Specify the file path
-const filePath = "./src/assets/index.html";
+const filePath = "./private/index.html";
 
 // Read the HTML file
 fs.readFile(filePath, "utf8", (err, data) => {
