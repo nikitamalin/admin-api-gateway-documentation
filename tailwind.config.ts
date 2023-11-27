@@ -33,7 +33,7 @@ const config: Config = {
       analogueBlue: "#0900ff"
     },
     fontFamily: {
-      sans: ["sans-serif", "sans-serif"],
+      sans: ["Inter var", "sans-serif"],
       serif: ["Georgia", "serif"],
       mono: ["Menlo", "monospace"],
       comfortaa: ["var(--font-comfortaa)", "sans-serif"],

@@ -1,608 +1,394 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-
-import { signIn, signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
-import useSwr from "swr";
-import { useState, useEffect, Fragment } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import {
-  useToast,
-  Spinner,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  useDisclosure,
-  ModalBody,
-  ModalCloseButton
-} from "@chakra-ui/react";
-import { CgProfile } from "react-icons/cg";
-import { useProfileContext } from "@/components/Context/ProfileContext";
-import MobileMenu from "@/components/Navbar/MobileMenu";
-import { motion } from "framer-motion";
-import Confetti from "@/components/Confetti";
-import Error from "@/components/Toast/error";
-import Success from "@/components/Toast/success";
-import { useDriverContext } from "@/components/Context/DriverContext";
-
+import Link from "next/link";
+import { useIframeContext } from "@/components/Context/iframe";
 export default function Home() {
-  const { data: session, status } = useSession();
-  const [isSignInLoading, setIsSignInLoading] = useState(false);
-  const [isVoteLoading, setIsVoteLoading] = useState(false);
-  const [isProfileLoading, setIsProfileLoading] = useState(false);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [vote, setVote] = useState<number>(0);
-  const [driver, setDriver] = useState<string>("");
-  const toast = useToast();
-  let { isOpen, onOpen, onClose, onToggle } = useProfileContext();
-  const {
-    isOpen: weekendIsOpen,
-    onOpen: weekendOnOpen,
-    onClose: weekendOnCloase
-  } = useDisclosure();
-  const { isOpen: EUIsOpen, onOpen: EUOnOpen } = useDisclosure();
+  const headingText = "text-2xl mt-5 font-medium";
+  const subHeadingText = "text-xl font-medium";
+  const subText = "text-lg";
+  const subHeading = "indent-6 flex flex-col";
+  const subSubHeading = "indent-12 flex flex-col";
+  const bulletSubSubHeading = "indent-12 text-sm";
+  const subSubSubheading = "indent-16";
+  const bulletSubSubSubHeading = "indent-16 text-sm";
 
-  const [email, setEmail] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [phoneNumber, setPhoneNumber] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
-  const [age, setAge] = useState<string>("");
-  const [isVisible, setIsVisible] = useState(false);
-  const [firstPass, setFirstPass] = useState<boolean>(true);
-  const [idToken, setIdToken] = useState<string>("");
-  const {
-    isOpen: signInIsOpen,
-    onOpen: signInOnOpen,
-    onClose: signInOnClose
-  } = useDisclosure();
+  let setUrl = useIframeContext().setUrl;
 
-  let { drivers, isDriversLoading } = useDriverContext();
-
-  const labelStyles = "mt-4 text-xl";
-  const inputStyles =
-    "mt-1 mr-1 border border-gray rounded-md py-1 px-3 text-2xl outline-blue cursor-text";
-
-  useEffect(() => {
-    const fetchSession = async () => {
-      if (session && session.user) {
-        if (session.user.name) {
-          setPhoneNumber(session.user.name);
-        }
-        if (session.idToken) {
-          setIdToken(session.idToken);
-        }
-      }
-    };
-
-    fetchSession();
-  }, [session]);
-
-  let weekendURL = "/api/get-weekend";
-  const { data: isWeekend, isLoading: isWeekendLoading } = useSwr(
-    weekendURL,
-    async () => {
-      const res = await fetch(weekendURL);
-      return res.json();
-    }
-  );
-
-  let EUURL = "/api/get-is-eu-member";
-  const { data: isEU, isLoading: isEULoading } = useSwr(EUURL, async () => {
-    const res = await fetch(EUURL);
-    return res.json();
-  });
-
-  let profileURL: any = null;
-  if (phoneNumber && idToken) {
-    profileURL = `/api/profile/get-profile?phoneNumber=${phoneNumber}&idToken=${idToken}`;
-  }
-
-  const { data: profile, isLoading: isProfileInfoLoading } = useSwr(
-    profileURL,
-    async () => {
-      const res = await fetch(profileURL);
-      return res.json();
-    }
-  );
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      signInOnOpen();
-    }
-  }, [status, signInOnOpen]);
-
-  useEffect(() => {
-    if (
-      status === "authenticated" &&
-      !isProfileInfoLoading &&
-      profile &&
-      !profile.profile_complete
-    ) {
-      onOpen();
-    }
-  }, [status, isProfileInfoLoading, onOpen, profile]);
-
-  useEffect(() => {
-    if (isWeekend && !isWeekend.isWeekend) {
-      weekendOnOpen();
-    }
-  }, [isWeekend, weekendOnOpen]);
-
-  useEffect(() => {
-    if (isEU && isEU.isEU) {
-      EUOnOpen();
-    }
-  }, [isEU, EUOnOpen]);
-
-  const createSuccessToast = (res: any, isBlue = false) => {
-    toast({
-      position: "top-right",
-      render: () => <Success message={res.message} />
-    });
-  };
-
-  const createErrorToast = (res: any, isBlue = false) => {
-    toast({
-      position: "top-right",
-      render: () => <Error message={res.message} />
-    });
-  };
-
-  async function handleVote(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsVoteLoading(true);
-    const response = await fetch("/api/create-vote", {
-      method: "POST",
-      body: JSON.stringify({
-        driver: driver,
-        phoneNumber: phoneNumber,
-        idToken: idToken
-      })
-    });
-    const res = await response.json();
-    if (
-      res.message ===
-        "Vote counted, check back in tomorrow to view results and we'll see you next weekend!" ||
-      res.message === "Vote counted, we'll see you again tomorrow!"
-    ) {
-      setIsVisible(true);
-      createSuccessToast(res, true);
-    } else {
-      createErrorToast(res);
-    }
-    await res;
-    setIsVoteLoading(false);
-    return;
-  }
-
-  async function deleteAccount(e: any) {
-    e.preventDefault();
-    setIsDeleteLoading(true);
-
-    const response = await fetch("/api/profile/delete-account", {
-      method: "POST",
-      body: JSON.stringify({
-        phoneNumber: phoneNumber,
-        idToken: idToken
-      })
-    });
-    const res = await response.json();
-    await res;
-    if (res.message !== "Success") {
-      res.message = "Sorry, we couldn't delete your account. Please try again.";
-      createErrorToast(res);
-    } else {
-      signOut({ callbackUrl: "/" });
-    }
-    setIsDeleteLoading(false);
-    return;
-  }
-
-  async function updateProfile(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setIsProfileLoading(true);
-    const response = await fetch("/api/profile/update-profile", {
-      method: "POST",
-      body: JSON.stringify({
-        email: email,
-        name: name,
-        phoneNumber: phoneNumber,
-        gender: gender,
-        age: age,
-        idToken: idToken
-      })
-    });
-    const res = await response.json();
-    if (res.message === "Success") {
-      res.message = "Saved";
-      onClose();
-      createSuccessToast(res);
-    } else {
-      createErrorToast(res);
-    }
-
-    setIsProfileLoading(false);
-    return await res;
-  }
-
-  if (firstPass && phoneNumber && profile && !("message" in profile)) {
-    setName(profile.name);
-    setEmail(profile.email);
-    setGender(profile.gender);
-    setAge(profile.age);
-    if (!profile.profile_complete) {
-      onOpen();
-    }
-    setFirstPass(false);
-  }
-
-  function fakeClose() {
-    return true;
-  }
-  let response: any = {};
-
-  if (
-    status === "loading" ||
-    isDriversLoading ||
-    isProfileInfoLoading ||
-    isWeekendLoading ||
-    (!phoneNumber && status === "authenticated")
-  ) {
-    return <LoadingSpinner />;
+  function setTheURL(url: string) {
+    setUrl("api/protectedPage?anchor=#" + url);
   }
 
   return (
-    <main
-      className={`flex h-[calc(100svh)] brk:h-[calc(100svh-137px)] flex-col items-center  bg-black ${inter.className}`}
-    >
-      <div className="w-[100%] h-[100svh] bg-[url('/bg-image.png')]">
-        <MobileMenu />
-        <div className="flex flex-col items-center justify-center w-[100%] h-[calc(100%-68px)] brk:h-[100%]">
-          {status === "unauthenticated" && (
-            <Modal isOpen={false /*true*/} onClose={fakeClose} isCentered>
-              <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
-              <ModalContent>
-                <ModalBody>
-                  <div className="flex flex-col items-center gap-10 p-10">
-                    <div
-                      className="relative
-			w-[66px] h-[66px] 
-			footerSM:w-[100px] footerSM:h-[100px] 
-			md:w-[120px] md:h-[120px] "
-                    >
-                      <Image src="/fab4_logo.png" alt="Logo" fill />
-                    </div>
-                    <span className="text-4xl text-center">
-                      <span className="font-semibold text-blue">Sign In</span>{" "}
-                      to Vote!
-                    </span>
-                    <span className="text-center">
-                      Cast your vote for a chance to win an all expense paid
-                      trip to the Turkey Night Grand Prix.
-                    </span>
-                    <div className="relative items-center ">
-                      <button
-                        onClick={() => {
-                          setIsSignInLoading(true);
-                          signIn(
-                            "auth0",
-                            { callbackUrl: "http://localhost:3001/" },
-                            { prompt: "login" }
-                          ).then(() => {
-                            setIsSignInLoading(false);
-                          });
-                        }}
-                        className={`py-2 px-3 bg-orange rounded-lg hover:bg-orangeHover cursor-pointer text-white text-xl font-semibold outline-none
-                      ${
-                        isSignInLoading ? "opacity-0 pointer-events-none" : ""
-                      }`}
-                      >
-                        Sign In to Win!
-                      </button>
-                      {isSignInLoading && (
-                        <div
-                          className="absolute inset-0 flex items-center justify-center bg-orange opacity-50 rounded-lg shadow-md py-2 px-3
-                         cursor-not-allowed"
-                        >
-                          <Spinner size="md" color="white" />
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </ModalBody>
-              </ModalContent>
-            </Modal>
-          )}
-          {status === "authenticated" && (
-            <Modal isOpen={/*isOpen*/ false} onClose={onClose} isCentered>
-              <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
-              <ModalContent>
-                <ModalCloseButton />
-                <ModalBody>
-                  <form
-                    id="profile-form"
-                    className="flex flex-col bg-white py-8 px-12 rounded-lg"
-                    onSubmit={updateProfile}
-                  >
-                    <label className={labelStyles}>
-                      Name
-                      <span className="text-[#E53B17] ml-[2px]">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      className={inputStyles}
-                      required
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                    ></input>
-                    <label className={labelStyles}>
-                      Email<span className="text-[#E53B17] ml-[2px]">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      className={inputStyles}
-                      required
-                      placeholder="name@example.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                    ></input>
-                    <label className={labelStyles}>Gender</label>
-                    <select
-                      id="gender"
-                      name="gender"
-                      defaultValue={gender}
-                      onChange={(e) => setGender(e.target.value)}
-                      className={inputStyles}
-                    >
-                      <option value="" disabled>
-                        Select a value
-                      </option>
-                      <option>Female</option>
-                      <option>Male</option>
-                      <option>Other</option>
-                    </select>
-                    <label className={labelStyles}>Age</label>
-                    <select
-                      id="age"
-                      name="age"
-                      defaultValue={age}
-                      onChange={(e) => setAge(e.target.value)}
-                      className={inputStyles}
-                    >
-                      <option value="" disabled>
-                        Select an age range
-                      </option>
-                      <option>0-14</option>
-                      <option>15-24</option>
-                      <option>25-42</option>
-                      <option>43-65</option>
-                      <option>65+</option>
-                    </select>
-                    <div className="flex flex-wrap mt-10 gap-5">
-                      <div className="relative items-center mx-auto text-2xl  ">
-                        <motion.button
-                          type="submit"
-                          value="Send"
-                          whileHover={{
-                            scale: 1.04,
-                            transition: { duration: 0.1 }
-                          }}
-                          whileTap={{
-                            scale: 0.98,
-                            transition: { duration: 0.1 }
-                          }}
-                          className={`flex bg-orange text-white rounded-full cursor-pointer transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                            isProfileLoading
-                              ? "opacity-0 pointer-events-none"
-                              : ""
-                          }`}
-                          disabled={isProfileLoading}
-                        >
-                          Save
-                        </motion.button>
-                        {isProfileLoading && (
-                          <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
-                            <Spinner size="md" color="white" />
-                          </div>
-                        )}
-                      </div>
-                      <div className="relative items-center mx-auto text-2xl">
-                        <motion.button
-                          type="button"
-                          onClick={(e) => {
-                            deleteAccount(e);
-                          }}
-                          whileHover={{
-                            scale: 1.04,
-                            transition: { duration: 0.1 }
-                          }}
-                          whileTap={{
-                            scale: 0.98,
-                            transition: { duration: 0.1 }
-                          }}
-                          className={`flex bg-orange text-white rounded-full cursor-pointer transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                            isDeleteLoading
-                              ? "opacity-0 pointer-events-none"
-                              : ""
-                          }`}
-                          disabled={isDeleteLoading}
-                        >
-                          Delete Account
-                        </motion.button>
-                        {isDeleteLoading && (
-                          <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
-                            <Spinner size="md" color="white" />
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </form>
-                </ModalBody>
-              </ModalContent>
-            </Modal>
-          )}
-          {status === "authenticated" && (
-            <div>
-              <button
-                className="mb-8"
-                onClick={() => {
-                  onToggle();
-                }}
-              >
-                <CgProfile size="48" className="text-orange" />
-              </button>
-            </div>
-          )}
-          <form
-            id="form"
-            className="flex flex-col base:w-[96%] footerXM:w-[90%] md:w-[700px] bg-white py-4 px-6 tableSM:py-6 tableSM:px-9 md:py-8 md:px-12 rounded-lg shadow-lg"
-            onSubmit={handleVote}
+    <div className="flex flex-col max-w-[800px] w-[80vw] my-10 mx-auto ">
+      <h1 className="mx-auto text-4xl">Car IQ Documentation</h1>
+      <div className={`${subText} flex flex-col`}>
+        <h2 className={`${headingText}`}>Authentication</h2>
+        <div className={`${subHeading}`}>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userLogin")}
           >
-            <table className="bg-white table-auto ">
-              <thead>
-                <tr>
-                  <th>Position</th>
-                  <th>Driver</th>
-                  <th>Votes</th>
-                </tr>
-              </thead>
-              <tbody>
-                {drivers.map((driver: any, index: number) => {
-                  return (
-                    <Fragment key={index}>
-                      <tr
-                        className={` hover:cursor-pointer py-2 row ${
-                          vote === index + 1
-                            ? "bg-orangeComp"
-                            : "hover:bg-light"
-                        }`}
-                        onClick={(e) => {
-                          setVote(index + 1);
-                          setDriver(driver.driver);
-                        }}
-                      >
-                        <td className="py-2 text-center">
-                          <span className="text-sm footerXM:text-md lgMenu:text-lg md:text-xl">
-                            {index + 1}
-                          </span>
-                        </td>
-                        <td className="py-2 text-center pr-2 footerXM:px-0">
-                          <div className="flex items-center justify-center gap-2 ">
-                            <div className="relative w-[32px] h-[32px] lgMenu:w-[48px] lgMenu:h-[48px] md:w-[64px] md:h-[64px]">
-                              <Image
-                                fill
-                                src={driver.image}
-                                alt={driver.driver}
-                                className="rounded-full"
-                              />
-                            </div>
+            userLogin
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; gives you access token which can be used as a Bearer token
+            for requests.
+          </span>
+        </div>
 
-                            <span className="text-md footerXM:text-lg lgMenu:text-xl md:text-2xl">
-                              {driver.driver}
-                            </span>
-                          </div>
-                        </td>
-                        <td className="py-2 text-center">
-                          <span className="text-md footerXM:text-lg lgMenu:text-xl md:text-2xl ">
-                            {driver.fan_votes.toLocaleString()}
-                          </span>
-                        </td>
-                      </tr>
-                      {index !== 3 && (
-                        <tr>
-                          <td colSpan={3}>
-                            <hr className="bg-[#C3C3C3] h-[1px]"></hr>
-                          </td>
-                        </tr>
-                      )}
-                    </Fragment>
-                  );
-                })}
-              </tbody>
-            </table>
+        <h2 className={`${headingText}`}>Vehicle Fleet Management(console)</h2>
+        <div className={`${subHeading}`}>
+          <h3 className={`${subHeadingText}`}>Single Vehicles</h3>
+          <div className={`${subSubHeading}`}>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleCreate")}
+            >
+              vehicleCreate
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("query-vehicle")}
+            >
+              vehicle
+            </Link>
+            <span className={`${bulletSubSubSubHeading}`}>
+              &bull; get a vehicle
+            </span>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleUpdate")}
+            >
+              vehicleUpdate
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("query-vehiclesFilter")}
+            >
+              vehiclesFilter
+            </Link>
+            <span className={`${bulletSubSubSubHeading}`}>
+              &bull; search across all vehicles in your organization
+            </span>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("query-vehiclesFilterByLocation")}
+            >
+              vehiclesFilterByLocation
+            </Link>
+          </div>
+          <h3 className={`${subHeadingText}`}>Vehicle Groups</h3>
+          <div className={`${subSubHeading}`}>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupCreate")}
+            >
+              vehicleGroupCreate
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("query-vehicleGroup")}
+            >
+              vehicleGroup
+            </Link>
+            <span className={`${bulletSubSubSubHeading}`}>
+              &bull; get vehicle group
+            </span>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupUpdate")}
+            >
+              vehicleGroupUpdate
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupDelete")}
+            >
+              vehicleGroupDelete
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("query-vehicleGroupsFilter")}
+            >
+              vehicleGroupsFilter
+            </Link>
+            <span className={`${bulletSubSubSubHeading}`}>
+              &bull; filter on vehicle groups in your organization
+            </span>
+            <Link
+              href="/documentation"
+              onClick={() =>
+                setTheURL("mutation-vehicleGroupSpendRestrictionsSet")
+              }
+            >
+              vehicleGroupSpendRestrictionsSet
+            </Link>
+            <span className={`${bulletSubSubSubHeading}`}>
+              &bull; set restriction on spending such as amount per day, amount
+              per transactions, and at what times and days of week.
+            </span>
+          </div>
+          <h3 className={`${subHeadingText}`}> Vehicle Group Drivers</h3>
+          <div className={`${subSubHeading}`}>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupDriversAdd")}
+            >
+              vehicleGroupDriversAdd
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupDriversRemove")}
+            >
+              vehicleGroupDriversRemove
+            </Link>
+          </div>
+          <h3 className={`${subHeadingText}`}> Vehicle Group Vehicles</h3>
+          <div className={`${subSubHeading}`}>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupVehiclesAdd")}
+            >
+              vehicleGroupVehiclesAdd
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("mutation-vehicleGroupVehiclesRemove")}
+            >
+              vehicleGroupVehiclesRemove
+            </Link>
+            <Link
+              href="/documentation"
+              onClick={() => setTheURL("query-vehicleGroup")}
+            >
+              vehicleGroup
+            </Link>
+          </div>
+        </div>
 
-            {isVisible && <Confetti />}
-            <div className="relative items-center mx-auto text-2xl mt-8 ">
-              <motion.button
-                type="submit"
-                className={`flex bg-orange text-white rounded-full transition-colors duration-200 hover:bg-orangeHover py-2 px-4 whitespace-nowrap ${
-                  isVoteLoading ? "opacity-0 pointer-events-none" : ""
-                }`}
-                whileHover={{
-                  scale: 1.04,
-                  transition: { duration: 0.1 }
-                }}
-                whileTap={{
-                  scale: 0.98,
-                  transition: { duration: 0.1 }
-                }}
-              >
-                Vote
-              </motion.button>
-              {isVoteLoading && (
-                <div className="absolute inset-0 flex items-center justify-center  bg-blue opacity-50 rounded-full py-2 px-4 cursor-not-allowed ">
-                  <Spinner size="md" color="white" />
-                </div>
-              )}
-            </div>
-          </form>
+        <h2 className={`${headingText}`}>User Management(console)</h2>
+        <div className={`${subHeading}`}>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userCreate")}
+          >
+            userCreate
+          </Link>
+          <Link href="/documentation" onClick={() => setTheURL("query-user")}>
+            user
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>&bull; get a user</span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userUpdate")}
+          >
+            userUpdate
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userOffboard")}
+          >
+            userOffboard
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; offboard a user, will be deleted in 7 days.
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userDelete")}
+          >
+            userDelete
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("query-usersFilter")}
+          >
+            usersFilter
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; filter on users in your entity
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userSetPassword")}
+          >
+            userSetPassword
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userForgotPassword")}
+          >
+            userForgotPassword
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userRefreshToken")}
+          >
+            userRefreshToken
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userLoginOtpRequest")}
+          >
+            userLoginOtpRequest
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-userLoginOtpVerify")}
+          >
+            userLoginOtpVerify
+          </Link>
+        </div>
+
+        <h2 className={`${headingText}`}>Pay App</h2>
+        <div className={`${subHeading}`}>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-servicePay")}
+          >
+            servicePay
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; pay at a gas station with direct connect
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-ttpTokenization")}
+          >
+            ttpTokenization
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; provision a card for TTP
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-serviceLocationsFilter")}
+          >
+            serviceLocationsFilter
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; get a list of stations near you
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-transactionsFilter")}
+          >
+            transactionsFilter
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; get a list of transactions
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-transactionStats")}
+          >
+            transactionStats
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; get KPIs on all your transactions for a given entityId
+          </span>
+        </div>
+        <h2 className={`${headingText}`}>Reporting/Invoicing</h2>
+        <div className={`${subHeading}`}>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-transactionReportDownload")}
+          >
+            transactionReportDownload
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; download transaction report on an entity, vehicle group,
+            vehicle, or a driver.
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-reportsDownload")}
+          >
+            reportsDownload
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; download a transactions report on after hours purchases, all
+            transaction, transactions with premium fuel, validation exceptions
+            on transactions, or a purchase exception.
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-driverReportDownload")}
+          >
+            driverReportDownload
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; download onboarded or offboarded drivers
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-creditStatementsList")}
+          >
+            creditStatementsList
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; get a list of your credit statements
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-creditPaymentsList")}
+          >
+            creditPaymentsList
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; get a list of payments for your credit account
+          </span>
+        </div>
+
+        <h2 className={`${headingText}`}>Policy Management</h2>
+        <div className={`${subHeading}`}>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-policyCreate")}
+          >
+            policyCreate
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-policyManage")}
+          >
+            policyManage
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; update and enable/disable policies.
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("mutation-policyDelete")}
+          >
+            policyDelete
+          </Link>
+        </div>
+
+        <h2 className={`${headingText}`}>Entity</h2>
+        <div className={`${subHeading}`}>
+          <Link href="/documentation" onClick={() => setTheURL("query-entity")}>
+            entity
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; get information on an entity
+          </span>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("query-entityFilter")}
+          >
+            entityFilter
+          </Link>
+          <Link
+            href="/documentation"
+            onClick={() => setTheURL("query-entityAccountInfo")}
+          >
+            entityAccountInfo
+          </Link>
+          <span className={`${bulletSubSubHeading}`}>
+            &bull; information about the credit or ach account associated with
+            this entity
+          </span>
         </div>
       </div>
-      <Modal isOpen={true /*weekendIsOpen*/} onClose={fakeClose} isCentered>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
-        <ModalContent>
-          <ModalBody>
-            <div className="flex flex-col items-center p-10">
-              <div
-                className="relative
-			w-[66px] h-[66px] 
-			footerSM:w-[100px] footerSM:h-[100px] 
-			md:w-[120px] md:h-[120px] "
-              >
-                <Image src="/fab4_logo.png" alt="Logo" fill />
-              </div>
-              <span className="text-4xl text-center mt-5">
-                {/* The Fab Four fan vote will be back soon! */}
-                The Fab Four fan vote is closed.
-              </span>
-              <span className="text-center mt-2">
-                Unfortunately, fan voting is now closed. We will see you back
-                here next season!
-                {/* Unfortunately, fan voting is currently closed. */}
-                {/*Be sure to come
-                back every Friday - Sunday so you don&apos;t miss your chance to
-                be part of the action and enter for your chance to win the
-                Turkey Night Sweepstakes.*/}
-              </span>
-              <button></button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-      <Modal isOpen={EUIsOpen} onClose={fakeClose} isCentered>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(1px)" />
-        <ModalContent>
-          <ModalBody>
-            <div className="flex flex-col items-center p-5">
-              <div
-                className="relative
-			w-[66px] h-[66px] 
-			footerSM:w-[100px] footerSM:h-[100px] 
-			md:w-[120px] md:h-[120px] "
-              >
-                <Image src="/fab4_logo.png" alt="Logo" fill />
-              </div>
-              <span className="text-4xl text-center mt-5 mb-36">
-                Sorry, we are not allowing members of the EU to vote at the
-                moment.
-              </span>
-              <button></button>
-            </div>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-    </main>
+    </div>
   );
 }

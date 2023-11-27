@@ -1,0 +1,642 @@
+{
+  "OBJECT": {
+    "Query": {
+      "fields": {
+        "Pass": {
+          "documentation": { "undocumented": true }
+        },
+        "organization": {
+          "documentation": { "undocumented": true }
+        },
+        "organizationsFilter": {
+          "documentation": { "undocumented": true }
+        },
+        "syncIndex": {
+          "documentation": { "undocumented": true }
+        }
+      }
+    },
+    "Mutation": {
+      "fields": {
+        "Pass": {
+          "documentation": { "undocumented": true }
+        },
+        "entityCreate": {
+          "documentation": { "undocumented": true }
+        },
+        "entityDelete": {
+          "documentation": { "undocumented": true }
+        },
+        "entityPrimaryAccountCreate": {
+          "documentation": { "undocumented": true }
+        },
+        "entityUpdate": {
+          "documentation": { "undocumented": true }
+        },
+        "organizationCreate": { "documentation": { "undocumented": true } },
+        "userDelete": {
+          "fields": {
+            "userDelete": {
+              "documentation": { "undocumented": true }
+            }
+          }
+        }
+      }
+    },
+    "Address": {
+      "fields": {
+        "line1": {
+          "documentation": { "example": "3001 Alliance Gateway Fwy" }
+        },
+        "line2": {
+          "documentation": { "example": "" }
+        },
+        "city": {
+          "documentation": { "example": "Fort Worth" }
+        },
+        "state": {
+          "documentation": { "example": "TX" }
+        },
+        "country": {
+          "documentation": { "example": "US" }
+        },
+        "zip": {
+          "documentation": { "example": "76117" }
+        }
+      }
+    },
+    "ServiceLocation": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Service location name" }
+        }
+      }
+    },
+    "DriverReport": {
+      "fields": {
+        "exists": {
+          "documentation": {
+            "example": true
+          }
+        },
+        "error": {
+          "documentation": {
+            "example": ""
+          }
+        }
+      }
+    },
+    "Report": {
+      "fields": {
+        "exists": {
+          "documentation": {
+            "example": true
+          }
+        },
+        "error": {
+          "documentation": {
+            "example": ""
+          }
+        }
+      }
+    },
+    "Organization": {
+      "fields": {
+        "name": {
+          "documentation": {
+            "example": "Organization Name"
+          }
+        },
+        "onboardedAt": {
+          "documentation": {
+            "example": null
+          }
+        },
+        "onboardedBy": {
+          "documentation": {
+            "example": ""
+          }
+        }
+      }
+    },
+    "EntityPrimaryAccount": {
+      "fields": {
+        "bankRoutingNo": {
+          "documentation": {
+            "example": "121122676"
+          }
+        }
+      }
+    },
+    "VehicleGroup": {
+      "fields": {
+        "name": {
+          "documentation": {
+            "example": "VehicleGroup Name"
+          }
+        },
+        "description": {
+          "documentation": {
+            "example": "VehicleGroup description"
+          }
+        }
+      }
+    },
+    "Entity": {
+      "fields": {
+        "name": {
+          "documentation": {
+            "example": "Entity Name"
+          }
+        },
+        "description": {
+          "documentation": {
+            "example": "Entity description"
+          }
+        }
+      }
+    },
+    "EntityAccountInfo": {
+      "fields": {
+        "balance": {
+          "documentation": {
+            "example": "65.07"
+          }
+        },
+        "availableCreditLimit": {
+          "documentation": {
+            "example": "2400.51"
+          }
+        },
+        "creditLimit": {
+          "documentation": {
+            "example": "2500"
+          }
+        },
+        "dueDate": {
+          "documentation": {
+            "example": "2023-10-04T00:00:00.000Z"
+          }
+        },
+        "pendingTransactionsBalance": {
+          "documentation": {
+            "example": "-24.38"
+          }
+        },
+        "billingCycle": {
+          "documentation": {
+            "example": ""
+          }
+        },
+        "outstandingBalance": {
+          "documentation": {
+            "example": "-75.11"
+          }
+        }
+      }
+    },
+    "TransactionsStats": {
+      "fields": {
+        "driversTotal": {
+          "documentation": {
+            "example": 1
+          }
+        },
+        "driversTransacting": {
+          "documentation": {
+            "example": 0
+          }
+        },
+        "vehiclesTotal": {
+          "documentation": {
+            "example": 1
+          }
+        },
+        "vehiclesTransacting": {
+          "documentation": {
+            "example": 0
+          }
+        },
+        "amountTotal": {
+          "documentation": {
+            "example": "0.00"
+          }
+        },
+        "amountAvg": {
+          "documentation": {
+            "example": "0.00"
+          }
+        },
+        "gallonsTotal": {
+          "documentation": {
+            "example": "0.00"
+          }
+        }
+      }
+    },
+    "PageMeta": {
+      "fields": {
+        "limit": {
+          "documentation": { "example": 5 }
+        },
+        "offset": {
+          "documentation": { "example": 0 }
+        },
+        "total": {
+          "documentation": { "example": 10 }
+        }
+      }
+    },
+    "PageRequest": {
+      "fields": {
+        "limit": {
+          "documentation": { "example": 5 }
+        },
+        "offset": {
+          "documentation": { "example": 0 }
+        }
+      }
+    },
+    "LoginOtpResponse": {
+      "fields": {
+        "successs": {
+          "documentation": { "example": true }
+        },
+        "error": {
+          "documentation": { "example": "" }
+        }
+      }
+    },
+    "VehicleMovement": {
+      "fields": {
+        "isDriving": {
+          "documentation": { "example": true }
+        },
+        "speed": {
+          "documentation": { "example": 20 }
+        },
+        "heading": {
+          "documentation": { "example": 0 }
+        },
+        "engineRoadSpeed": {
+          "documentation": { "example": 20 }
+        },
+        "accelerationLinear": {
+          "documentation": { "example": 0 }
+        },
+        "accelerationSide": {
+          "documentation": { "example": 0 }
+        },
+        "accelerationVertical": {
+          "documentation": { "example": 0 }
+        },
+        "odometerCalculated": {
+          "documentation": { "example": 130056 }
+        }
+      }
+    },
+    "VehicleType": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Vehicle Name" }
+        },
+        "serialNumber": {
+          "documentation": { "example": "2T2ZK1BA0CC083223" }
+        },
+        "source": {
+          "documentation": { "example": "geotab" }
+        },
+        "imei": {
+          "documentation": { "example": null }
+        },
+        "internalDescription": {
+          "documentation": { "example": null }
+        },
+        "internalNumber": {
+          "documentation": { "example": null }
+        }
+      }
+    },
+    "VehicleFuel": {
+      "fields": {
+        "percent": {
+          "documentation": { "example": 90 }
+        },
+        "level": {
+          "documentation": { "example": 0 }
+        },
+        "totalUsed": {
+          "documentation": { "example": 0 }
+        },
+        "tripUsed": {
+          "documentation": { "example": 0 }
+        }
+      }
+    },
+    "ServiceProvider": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Service provider name" }
+        },
+        "description": {
+          "documentation": { "example": "Service provider description" }
+        }
+      }
+    },
+    "TransactionsFilterOptions": {
+      "fields": {
+        "fromDate": {
+          "documentation": { "example": "2023-08-031T01:17:00.000Z" }
+        },
+        "toDate": {
+          "documentation": { "example": "2023-09-30T01:16:59.999Z" }
+        },
+        "fromLocalDate": {
+          "documentation": { "example": "2023-09-00T01:00:00.000Z" }
+        },
+        "toLocalDate": {
+          "documentation": { "example": "2023-09-30T01:23:59.999Z" }
+        }
+      }
+    },
+    "InvoicePayment": {
+      "fields": {
+        "description": {
+          "documentation": { "example": "Invoice Payment Description" }
+        }
+      }
+    },
+    "Product": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Product Name" }
+        }
+      }
+    },
+    "PaymentProvider": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Payment Provider Name" }
+        },
+        "slug": {
+          "documentation": { "example": "" }
+        }
+      }
+    },
+    "SearchData": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Search Data Name" }
+        },
+        "description": {
+          "documentation": { "example": "Search Data Description" }
+        }
+      }
+    },
+    "TransactionItem": {
+      "fields": {
+        "name": {
+          "documentation": { "example": "Transaction Item Name" }
+        }
+      }
+    },
+    "VehicleDetails": {
+      "fields": {
+        "description": {
+          "documentation": { "example": "Vehicle Details Description" }
+        },
+        "bodySubtype": {
+          "documentation": { "example": "Crossover" }
+        },
+        "bodyType": {
+          "documentation": { "example": "Wagon" }
+        },
+        "brakeSystem": {
+          "documentation": { "example": "Hydroulic" }
+        },
+        "doors": {
+          "documentation": { "example": 4 }
+        },
+        "driveType": {
+          "documentation": { "example": "AWD" }
+        },
+        "fuelTankCapacityPrimary": {
+          "documentation": { "example": 70.030085 }
+        },
+        "descripfuelTankCapacitySecondarytion": {
+          "documentation": { "example": null }
+        },
+        "manufactureCountry": {
+          "documentation": { "example": "United States" }
+        },
+        "manufacturePlant": {
+          "documentation": { "example": "Lafayette, Indiana" }
+        },
+        "market": {
+          "documentation": { "example": "US Light-Duty" }
+        },
+        "modelNumber": {
+          "documentation": { "example": "LDF" }
+        },
+        "oemBodyStyle": {
+          "documentation": { "example": "Crossover" }
+        },
+        "oemDoors": {
+          "documentation": { "example": 4 }
+        },
+        "packageCode": {
+          "documentation": { "example": null }
+        },
+        "restraintType": {
+          "documentation": {
+            "example": "Driver and front passenger front, side, and seat cushion airbags with passenger sensing deactivation, driver knee airbag, and front and rear side curtain airbags with rollover sensor."
+          }
+        },
+        "trim": {
+          "documentation": { "example": "Limited" }
+        },
+        "vehicleType": {
+          "documentation": { "example": "Car" }
+        },
+        "destinationCharge": {
+          "documentation": { "example": "" }
+        },
+        "gasGuzzlerTax": {
+          "documentation": { "example": null }
+        },
+        "invoicePrice": {
+          "documentation": { "example": null }
+        },
+        "msrp": {
+          "documentation": { "example": null }
+        },
+        "colorExteriorCode": {
+          "documentation": { "example": null }
+        },
+        "colorExteriorGeneric": {
+          "documentation": { "example": null }
+        },
+        "colorExteriorHex": {
+          "documentation": { "example": null }
+        },
+        "colorExterior": {
+          "documentation": { "example": null }
+        },
+        "colorInteriorCode": {
+          "documentation": { "example": null }
+        },
+        "colorInteriorGeneric": {
+          "documentation": { "example": null }
+        },
+        "colorInteriorHex": {
+          "documentation": { "example": null }
+        },
+        "colorInterior": {
+          "documentation": { "example": null }
+        }
+      }
+    }
+  },
+  "INPUT_OBJECT": {
+    "DriverReportDownloadInput": {
+      "inputFields": {
+        "id": {
+          "documentation": { "example": "Entity ID" }
+        }
+      }
+    },
+    "VehicleGroupCreateInput": {
+      "inputFields": {
+        "name": {
+          "documentation": { "example": "Vehicle group create name" }
+        },
+        "description": {
+          "documentation": { "example": "Vehicle group create description" }
+        },
+        "vehicles": {
+          "documentation": {
+            "example": [
+              "7b80e47a-eb42-4d5c-8a6d-9f8c23b1f8a1",
+              "f943d6e3-5d7a-4d6f-bc4b-82dcb8c4a6c2"
+            ]
+          }
+        },
+        "drivers": {
+          "documentation": {
+            "example": ["a2fe0b81-09f9-4f16-8b1d-73a3c8aef94c"]
+          }
+        }
+      }
+    },
+    "SearchSortOptions": {
+      "inputFields": {
+        "orderBy": {
+          "documentation": { "example": [] }
+        }
+      }
+    },
+    "ServiceLocationsFilterOptions": {
+      "inputFields": {
+        "brands": {
+          "documentation": { "example": ["Shell", "Wawa"] }
+        }
+      }
+    },
+    "SearchInput": {
+      "inputFields": {
+        "sortOptions": {
+          "documentation": { "undocumented": true }
+        }
+      }
+    },
+    "VehicleGroupVehiclesAddInput": {
+      "inputFields": {
+        "drivers": {
+          "documentation": {
+            "example": [
+              "a2fe0b81-09f9-4f16-8b1d-73a3c8aef94c",
+              "c9a3f1f6-6eb6-4a9d-8b44-ef35b4fc7c3e"
+            ]
+          }
+        }
+      }
+    },
+    "VehicleGroupVehiclesRemoveInput": {
+      "inputFields": {
+        "vehicles": {
+          "documentation": {
+            "example": [
+              "7b80e47a-eb42-4d5c-8a6d-9f8c23b1f8a1",
+              "f943d6e3-5d7a-4d6f-bc4b-82dcb8c4a6c2"
+            ]
+          }
+        }
+      }
+    },
+    "VehicleGroupUpdateInput": {
+      "inputFields": {
+        "name": {
+          "documentation": { "example": "Vehicle group update name" }
+        },
+        "description": {
+          "documentation": { "example": "Vehicle group update description" }
+        }
+      }
+    },
+    "VehicleUpdateInput": {
+      "inputFields": {
+        "description": {
+          "documentation": { "example": "Vehicle update input description" }
+        },
+        "number": {
+          "documentation": { "example": "Vehicle Number" }
+        }
+      }
+    },
+    "AddressInput": {
+      "inputFields": {
+        "line1": {
+          "documentation": { "example": "3001 Alliance Gateway Fwy" }
+        },
+        "line2": {
+          "documentation": { "example": "" }
+        },
+        "city": {
+          "documentation": { "example": "Fort Worth" }
+        },
+        "state": {
+          "documentation": { "example": "TX" }
+        },
+        "country": {
+          "documentation": { "example": "US" }
+        },
+        "zip": {
+          "documentation": { "example": "76117" }
+        }
+      }
+    }
+  },
+  "ENUM": {
+    "LoginType": {
+      "documentation": { "example": "EMAIL" }
+    },
+    "UserStatus": {
+      "documentation": { "example": "ONBOARDED" }
+    },
+    "FundingSource": {
+      "documentation": { "example": "ACH" }
+    },
+    "PolicyType": {
+      "documentation": { "example": "SERVICE" }
+    },
+    "TransactionType": {
+      "documentation": { "example": "REALTIME" }
+    },
+    "VehicleDataType": {
+      "documentation": { "example": "VEHICLE_ONLINE" }
+    },
+    "ServiceType": {
+      "documentation": { "example": "FUEL" }
+    }
+  }
+}

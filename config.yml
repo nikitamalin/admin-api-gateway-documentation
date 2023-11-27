@@ -1,0 +1,69 @@
+# Environment variable substitution will be performed by SpectaQL on all strings encountered
+spectaql:
+  # Optional Boolean indicating whether to omit the HTML <body/> and generate the documentation content only
+  # Default: false
+  embeddable: true
+  oneFile: false
+  targetDir: ./src/assets
+  logoUrl: https://res.cloudinary.com/dpibqp4rk/image/upload/v1693529188/CarIQ-Pay-RGB-Spacing-Final_vseszs.png
+  logoHeightPx: 40
+  scrollPaddingTopPx: 0
+  errorOnInterpolationReferenceNotFound: true
+constructor: Hello
+introspection:
+  url: https://api-gateway.dev.gocariq.com/
+  # url: http://localhost:4000
+  # headers:
+  # Authorization: Bearer
+  spectaqlDirective:
+    enable: true
+    directiveName: "spectaql"
+    optionsTypeName: "SpectaQLOption"
+  removeTrailingPeriodFromDescriptions: false
+  fieldExpansionDepth: 1
+  metadataFile: documentation.json
+
+servers:
+  - url: https://api-gateway.dev.gocariq.com/
+    description: Production Server
+    # Indicates to use this server's URL as the typical GraphQL request base in the documentation
+    # If no server entries have this indicator, the first server's URL will be used.
+    # If no server entries are defined at all, the Introspection URL will be used.
+    production: true
+    # A place to list any Headers for your GraphQL API calls
+    headers:
+      - name: Authorization
+        example: Bearer <YOUR_TOKEN_HERE>
+        comment: Your API token from the dashboard. Must be included in all API calls.
+
+info:
+  # Set to true to do no Introduction area rendering at all. Supersedes the below options
+  # Default: false
+  x-hideIntroduction: false
+  # Set to true to not render a friendly Welcome section based on the description in this area
+  # Default: false
+  x-hideWelcome: false
+  # Set to true to not render your intro items
+  # Default: false
+  x-hideIntroItems: false
+
+  # Set to true to not render the deprecated label
+  # Default: false
+  x-hideIsDeprecated: false
+  # Set to true to not render the deprecation reason
+  # Default: false
+  x-hideDeprecationReason: false
+  title: Car IQ API Reference
+  description: Welcome to the Car IQ GraphQL API reference! This reference includes the complete set of GraphQL types, queries, mutations, and their parameters.
+  version: 1.0.0
+  x-htmlTitle: Your HTML page title here
+  termsOfService: "https://www.gocariq.com/terms-of-use/"
+  contact:
+    name: Car IQ Support
+    email: support@gocariq.com
+    url: https://www.gocariq.com/
+  license:
+    name: Apache 2.0
+    url: "https://www.apache.org/licenses/LICENSE-2.0.html"
+  x-introItems:
+  x-hidePoweredBy: false

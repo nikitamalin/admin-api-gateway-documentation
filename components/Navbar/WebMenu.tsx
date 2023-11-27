@@ -7,7 +7,7 @@ import { Spinner } from "@chakra-ui/react";
 import { CgProfile } from "react-icons/cg";
 import { useProfileContext } from "../Context/ProfileContext";
 import { useDriverContext } from "../Context/DriverContext";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner/LoadingSpinner";
 interface Props {
   children?: ReactNode;
 }

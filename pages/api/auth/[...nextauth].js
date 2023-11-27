@@ -1,10 +1,11 @@
 import NextAuth from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next";
 import Auth0Provider from "next-auth/providers/auth0";
-import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/lib/client";
-import { Prisma } from "@prisma/client";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+
 export default NextAuth({
+  // adapter: PrismaAdapter(prisma),
   providers: [
     Auth0Provider({
       clientId: process.env.AUTH0_CLIENT_ID,
@@ -13,36 +14,47 @@ export default NextAuth({
     })
   ],
   callbacks: {
-    async signIn({ user, profile }) {
-      if (profile && profile.name) {
-        try {
-          await prisma.userInfo.create({
-            data: {
-              phone_number: profile.name
-            }
-          });
-        } catch (err) {
-          if (!err instanceof Prisma.PrismaClientKnownRequestError) {
-            console.error("Internal Server Error:", err.message);
+    async signIn({ user, profile, account }) {
+      if (user && user.email) {
+        const whiteList = ["@gocariq.com"];
+        for (const domain of whiteList) {
+          if (user.email.endsWith(domain)) {
+            return true;
           }
         }
+
+        // const isAllowedUser = await prisma.admin.findUnique({
+        //   where: {
+        //     email: user.email
+        //   }
+        // });
+        // if (isAllowedUser == undefined) {
+        //   return "/not-authorized";
+        // }
+        return true;
       }
-      return true;
+      return "/not-authorized";
     },
     async session({ session, token, user }) {
+      session.user.id = token.id;
+      session.accessToken = token.accessToken;
       session.idToken = token.idToken;
       return session;
     },
     async jwt({ token, user, account }) {
+      if (user) {
+        token.id = user.id;
+      }
       if (account) {
+        token.accessToken = account.access_token;
         token.idToken = account.id_token;
       }
       return token;
     }
   },
   /*pages: {
-      //   error: '/auth/error',
-    },*/
+    //   error: '/auth/error',
+  },*/
   debug: true,
   secret: process.env.NEXTAUTH_SECRET
 });

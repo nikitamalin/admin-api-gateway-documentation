@@ -9,7 +9,13 @@ const nextConfig = {
       "static.wixstatic.com",
       "res.cloudinary.com"
     ]
-  }
+  },
+  rewrites: async () => [
+    {
+      source: "/documentation",
+      destination: "/index.html"
+    }
+  ]
 };
 
 module.exports = nextConfig;
