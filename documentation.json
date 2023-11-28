@@ -35,11 +35,7 @@
         },
         "organizationCreate": { "documentation": { "undocumented": true } },
         "userDelete": {
-          "fields": {
-            "userDelete": {
-              "documentation": { "undocumented": true }
-            }
-          }
+          "documentation": { "undocumented": true }
         }
       }
     },

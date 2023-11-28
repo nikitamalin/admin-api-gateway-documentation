@@ -260,13 +260,6 @@ export default function Home() {
           <Link
             className={`${linkClass}`}
             href="/documentation"
-            onClick={() => setTheURL("mutation-userDelete")}
-          >
-            userDelete
-          </Link>
-          <Link
-            className={`${linkClass}`}
-            href="/documentation"
             onClick={() => setTheURL("query-usersFilter")}
           >
             usersFilter
