@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { stat } from "fs/promises";
 import { createReadStream, existsSync } from "fs";
 import path from "path";
-import mime from "mime";
 import { getSession } from "next-auth/react";
 
 export default async function getFile(

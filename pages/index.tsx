@@ -18,7 +18,7 @@ export default function Home() {
     setUrl("api/protectedPage?anchor=#" + url);
   }
 
-  const linkClass = "cursor-pointer hover:text-orange";
+  const linkClass = "cursor-pointer hover:text-orange mr-auto";
 
   return (
     <div className="flex flex-col max-w-[800px] w-[80vw] my-10 mx-auto ">
