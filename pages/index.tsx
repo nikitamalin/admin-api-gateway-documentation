@@ -336,6 +336,9 @@ export default function Home() {
           <span className={`${bulletSubSubHeading}`}>
             &bull; get a list of stations near you
           </span>
+        </div>
+        <h2 className={`${headingText}`}>Transactions</h2>
+        <div className={`${subHeading}`}>
           <Link
             className={`${linkClass}`}
             href="/documentation"
