@@ -20,9 +20,7 @@ export default function MainLayout({ children }: Props) {
   ) {
     signOut({ callbackUrl: "/" });
   }*/
-  if (status === "loading") {
-    return <LoadingSpinner />;
-  }
+
   return (
     <div className="flex flex-col relative">
       <Head>
@@ -58,7 +56,13 @@ export default function MainLayout({ children }: Props) {
           />
           <meta property="og:image" content="/cariq.png" /> */}
       </Head>
-      {status === "unauthenticated" ? <Unauthenticated /> : <>{children}</>}
+      {status === "loading" ? (
+        <LoadingSpinner />
+      ) : (
+        <>
+          {status === "unauthenticated" ? <Unauthenticated /> : <>{children}</>}
+        </>
+      )}
     </div>
   );
 }

@@ -142,6 +142,44 @@ export default function Home() {
               per transactions, and at what times and days of week.
             </span>
           </div>
+          <h3 className={`${subHeadingText}`}>Vehicle Group Offline Mode</h3>
+          <div className={`${subSubHeading}`}>
+            <Link
+              className={`${linkClass}`}
+              href="/documentation"
+              onClick={() => setTheURL("query-riskRuleGet")}
+            >
+              riskRuleGet
+            </Link>
+            <Link
+              className={`${linkClass}`}
+              href="/documentation"
+              onClick={() => setTheURL("query-riskRulesList")}
+            >
+              riskRulesList
+            </Link>
+            <Link
+              className={`${linkClass}`}
+              href="/documentation"
+              onClick={() => setTheURL("mutation-riskRuleCreate")}
+            >
+              riskRuleCreate
+            </Link>
+            <Link
+              className={`${linkClass}`}
+              href="/documentation"
+              onClick={() => setTheURL("mutation-riskRuleUpdate")}
+            >
+              riskRuleUpdate
+            </Link>
+            <Link
+              className={`${linkClass}`}
+              href="/documentation"
+              onClick={() => setTheURL("mutation-riskRuleDelete")}
+            >
+              riskRuleDelete
+            </Link>
+          </div>
           <h3 className={`${subHeadingText}`}> Vehicle Group Drivers</h3>
           <div className={`${subSubHeading}`}>
             <Link
