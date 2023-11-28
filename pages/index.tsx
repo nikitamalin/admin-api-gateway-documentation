@@ -39,7 +39,7 @@ export default function Home() {
           </span>
         </div>
 
-        <h2 className={`${headingText}`}>Vehicle Fleet Management(console)</h2>
+        <h2 className={`${headingText}`}>Vehicle Fleet Management</h2>
         <div className={`${subHeading}`}>
           <h3 className={`${subHeadingText}`}>Single Vehicles</h3>
           <div className={`${subSubHeading}`}>
@@ -223,7 +223,7 @@ export default function Home() {
           </div>
         </div>
 
-        <h2 className={`${headingText}`}>User Management(console)</h2>
+        <h2 className={`${headingText}`}>User Management</h2>
         <div className={`${subHeading}`}>
           <Link
             className={`${linkClass}`}
