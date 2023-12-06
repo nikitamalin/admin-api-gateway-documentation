@@ -51,14 +51,18 @@ export default function Setup() {
           GraphQL is a query language which is executed by invoking an API call.
           A GraphQL service has a single url with a defined fields for both its
           input and output. For example, our development GraphQL service lies on
-          this url:{" "}
-          <a href="https://api-gateway.dev.gocariq.com/" target="_blank">
+          this url:&nbsp;
+          <a
+            href="https://api-gateway.dev.gocariq.com/"
+            target="_blank"
+            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+          >
             https://api-gateway.dev.gocariq.com/
           </a>
           . If you would like to login to our platform and only need the access
           token, then you would use the following query and input schema.
         </span>
-        <pre className="mt-2">
+        <pre className="mt-2 text-sm">
           <code
             dangerouslySetInnerHTML={{
               __html: `mutation userLogin($input: UserLoginInput!) {
@@ -69,7 +73,7 @@ export default function Setup() {
             }}
           ></code>
         </pre>
-        <pre className="mt-2">
+        <pre className="mt-2 text-sm">
           <code
             dangerouslySetInnerHTML={{
               __html: `{
@@ -99,7 +103,7 @@ export default function Setup() {
           userLogin schema like <code>token_type</code>, then you would just
           include that in the mutation as such:
         </span>
-        <pre className="mt-2">
+        <pre className="mt-2 text-sm">
           <code
             dangerouslySetInnerHTML={{
               __html: `mutation userLogin($input: UserLoginInput!) {
@@ -130,6 +134,7 @@ export default function Setup() {
           <a
             href="https://www.apollographql.com/docs/react/get-started"
             target="_blank"
+            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
             <pre>
               <code>@apollo/client</code>
@@ -185,7 +190,11 @@ export default function Setup() {
         </h2>
         <div>
           We suggest using{" "}
-          <a href="https://www.apollographql.com/docs/kotlin" target="_blank">
+          <a
+            href="https://www.apollographql.com/docs/kotlin"
+            target="_blank"
+            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+          >
             Apollo Kotlin
           </a>
         </div>
@@ -194,7 +203,11 @@ export default function Setup() {
         </h2>
         <div>
           We suggest using{" "}
-          <a href="https://www.apollographql.com/docs/ios" target="_blank">
+          <a
+            href="https://www.apollographql.com/docs/ios"
+            target="_blank"
+            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+          >
             Apollo IOS
           </a>
         </div>
@@ -203,7 +216,11 @@ export default function Setup() {
         </h2>
         <div>
           We suggest using{" "}
-          <a href="https://pub.dev/packages/graphql" target="_blank">
+          <a
+            href="https://pub.dev/packages/graphql"
+            target="_blank"
+            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+          >
             graphql: ^5.1.3 dart library
           </a>
         </div>
