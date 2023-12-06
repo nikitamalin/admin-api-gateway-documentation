@@ -2,7 +2,7 @@ import React from "react";
 import Link from "next/link";
 import { useIframeContext } from "@/components/Context/iframe";
 
-export default function Home() {
+export default function Setup() {
   const headingText = "text-2xl mt-5 font-medium";
   const subHeadingText = "text-xl font-medium";
   const subText = "text-lg";
