@@ -3,7 +3,8 @@ import React, { ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import LoadingSpinner from "@/components/Auth/LoadingSpinner";
 import Unauthenticated from "../Auth/Unauthenticated";
-
+import Navbar from "../Navbar";
+import { useRouter } from "next/router";
 // import { isValidToken } from "@/utils/auth";
 interface Props {
   children?: ReactNode;
@@ -11,6 +12,7 @@ interface Props {
 
 export default function MainLayout({ children }: Props) {
   const { data: session, status } = useSession();
+  const router = useRouter();
   /*
   if (
     session &&
@@ -56,6 +58,7 @@ export default function MainLayout({ children }: Props) {
           />
           <meta property="og:image" content="/cariq.png" /> */}
       </Head>
+      {router.pathname !== "/documentation" && <Navbar />}
       {status === "loading" ? (
         <LoadingSpinner />
       ) : (

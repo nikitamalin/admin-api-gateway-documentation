@@ -290,6 +290,12 @@ fs.readFile(filePath, "utf8", (err, data) => {
     "2e3ab6a4-8c1f-47d9-9df7-5a8b3c2e9c9d"
   );
   replaceSingleStringExample("vin", "2T2ZK1BA0CC083223");
+
+  data = data.replace(
+    /<div id="logo">\s*<img src="https:\/\/res.cloudinary.com\/dpibqp4rk\/image\/upload\/v1693529188\/CarIQ-Pay-RGB-Spacing-Final_vseszs.png" title="Car IQ API Reference" \/>\s*<\/div>/,
+    '<a id="logo" href="/" target="_top">\n  <img\n    src="https://res.cloudinary.com/dpibqp4rk/image/upload/v1693529188/CarIQ-Pay-RGB-Spacing-Final_vseszs.png"\n    title="Car IQ API Reference"\n  />\n</a>'
+  );
+
   fs.writeFile(filePath, data, "utf8", (err) => {
     if (err) {
       console.error("Error writing file:", err);

@@ -24,6 +24,19 @@ export default function Home() {
     <div className="flex flex-col max-w-[800px] w-[80vw] my-10 mx-auto ">
       <h1 className="mx-auto text-4xl">Car IQ Documentation</h1>
       <div className={`${subText} flex flex-col`}>
+        <span className="mt-10 ">
+          Check out the&nbsp;
+          <Link
+            href="/setup"
+            className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+          >
+            setup docs
+          </Link>
+        </span>
+        <span className="mt-5">
+          Click any of the following queries/mutations to get their fields and
+          types.
+        </span>
         <h2 className={`${headingText}`}>Authentication</h2>
         <div className={`${subHeading}`}>
           <Link
@@ -38,7 +51,6 @@ export default function Home() {
             for requests.
           </span>
         </div>
-
         <h2 className={`${headingText}`}>Vehicle Fleet Management</h2>
         <div className={`${subHeading}`}>
           <h3 className={`${subHeadingText}`}>Single Vehicles</h3>
@@ -222,7 +234,6 @@ export default function Home() {
             </Link>
           </div>
         </div>
-
         <h2 className={`${headingText}`}>User Management</h2>
         <div className={`${subHeading}`}>
           <Link
@@ -303,7 +314,6 @@ export default function Home() {
             userLoginOtpVerify
           </Link>
         </div>
-
         <h2 className={`${headingText}`}>Pay App</h2>
         <div className={`${subHeading}`}>
           <Link
@@ -416,7 +426,6 @@ export default function Home() {
             &bull; get a list of payments for your credit account
           </span>
         </div>
-
         <h2 className={`${headingText}`}>Policy Management</h2>
         <div className={`${subHeading}`}>
           <Link
@@ -444,7 +453,6 @@ export default function Home() {
             policyDelete
           </Link>
         </div>
-
         <h2 className={`${headingText}`}>Entity</h2>
         <div className={`${subHeading}`}>
           <Link
