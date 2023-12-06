@@ -13,36 +13,36 @@ export default function Home() {
       <h1 className="mx-auto text-4xl">Setup for Car IQ Documentation</h1>
       <div className={`${subText} flex flex-col mt-5`}>
         <div className="flex flex-col gap-1">
-          <a
+          <Link
             href="/setup#intro"
             className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
             Introduction
-          </a>
-          <a
+          </Link>
+          <Link
             href="/setup#javascript"
             className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
             Javascript/Node.js
-          </a>
-          <a
+          </Link>
+          <Link
             href="/setup#java"
             className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
             Java/Kotlin
-          </a>
-          <a
+          </Link>
+          <Link
             href="/setup#swift"
             className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
             Swift
-          </a>
-          <a
+          </Link>
+          <Link
             href="/setup#flutter"
             className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
             Flutter
-          </a>
+          </Link>
         </div>
         <h2 className="text-2xl mt-10" id="intro">
           Introduction to GraphQL
