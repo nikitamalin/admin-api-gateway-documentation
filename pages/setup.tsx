@@ -197,6 +197,49 @@ export default function Setup() {
           >
             Apollo Kotlin
           </a>
+          .
+          <br /> <br />
+          Here&apos;s an example of userLoginOtpRequest to initiate the driver
+          login. First we add the mutation to our graphql schema.
+          <pre className="mt-2 text-sm whitespace-pre-wrap">
+            <code
+              dangerouslySetInnerHTML={{
+                __html: `mutation userLoginOtpRequest($client_id: String, $client_secret: String, $connection: String, $phone_number: String, $send: String, $language: String) {
+  userLoginOtpRequest(client_id: $client_id, client_secret: $client_secret, connection: $connection, phone_number: $phone_number, send: $send, language: $language) {
+    success
+    error
+  }
+}
+              `
+              }}
+            />
+          </pre>
+          Then we write the logic to execute the mutation in another file.
+          <pre className="mt-2 text-sm whitespace-pre-wrap">
+            <code
+              dangerouslySetInnerHTML={{
+                __html: `private suspend fun userLoginOtpRequest(client_id: String, client_secret: String, connection: String, phone_number: String, send: String, language: String): Boolean {
+  val response = try {
+      apolloClient.mutation(LoginMutation(email = email)).execute()
+  } catch (e: ApolloException) {
+      Log.w("Login", "Failed to login", e)
+      return false
+  }
+  if (response.hasErrors()) {
+      Log.w("Login", "Failed to login: \${response.errors?.get(0)?.message}")
+      return false
+  }
+  val success = response.data?.userLoginOtpRequest?.success
+  if (success == false) {
+      Log.w("Login", "Failed to login")
+      return false
+  }
+  return true
+}
+              `
+              }}
+            />
+          </pre>
         </div>
         <h2 className="text-2xl mt-10" id="swift">
           Swift
@@ -210,6 +253,49 @@ export default function Setup() {
           >
             Apollo IOS
           </a>
+          <br />
+          <br />
+          Here&apos;s an example of userLoginOtpRequest to initiate the driver
+          login. First we add the mutation to our graphql schema.
+          <pre className="mt-2 text-sm whitespace-pre-wrap">
+            <code
+              dangerouslySetInnerHTML={{
+                __html: `mutation userLoginOtpRequest($client_id: String!, $client_secret: String!, $connection: String!, $phone_number: String, $send: String, $language: String) {
+  userLoginOtpRequest(client_id: $client_id, client_secret: $client_secret, connection: $connection, phone_number: $phone_number, send: $send, language: $language) {
+    success
+    error
+  }
+}
+              `
+              }}
+            />
+          </pre>
+          Then we write the logic to execute the mutation in another file.
+          <pre className="mt-2 text-sm whitespace-pre-wrap">
+            <code
+              dangerouslySetInnerHTML={{
+                __html: `Network.shared.apollo.perform(mutation: LoginMutation(client_id: client_id, client_secret: client_secret, connection: connection, phone_number: phone_number, send: send, language: language)) { [weak self] result in
+  defer {
+      self?.isSubmitEnabled = true
+  }
+
+  switch result {
+  case .success(let graphQLResult):
+      if let success = graphQLResult.data?.userLoginOtpRequest?.success {
+          self?.isPresented = false
+      }
+
+      if let errors = graphQLResult.errors {
+          self?.appAlert = .errors(errors: errors)
+      }
+  case .failure(let error):
+      self?.appAlert = .errors(errors: [error])
+  }
+}
+`
+              }}
+            />
+          </pre>
         </div>
         <h2 className="text-2xl mt-10" id="flutter">
           Flutter
@@ -224,6 +310,47 @@ export default function Setup() {
             graphql: ^5.1.3 dart library
           </a>
         </div>
+        <span>
+          Here&apos;s an example userLoginOtpRequest mutation that you would use
+          to sign in a driver in your mobile app.
+          <pre className="mt-2 text-sm whitespace-pre-wrap">
+            <code
+              dangerouslySetInnerHTML={{
+                __html: `const String userLoginOtpRequest = r'''
+  mutation userLoginOtpRequest($input: UserLoginOtpRequestInput!) {
+    action: userLoginOtpRequest(input: {client_id: $client_id, client_secret: $client_secret, connection: $connection, phone_number: $phone_number, send: $send, language: $language}) {
+        success
+        error
+    }
+  }
+''';
+
+final MutationOptions options = MutationOptions(
+  document: gql(userLoginOtpRequest),
+  variables: <String, String>{
+    'client_id': "your_client_id",
+    'client_secret': "your_client_secret",
+    'connection': "SMS",
+    'phone_number': "15555555555",
+    "send": "CODE",
+    "language: 'EN',
+  },
+);
+
+final QueryResult result = await client.mutate(options);
+if (result.hasException) {
+  print(result.exception.toString());
+  return;
+}
+
+final String bool =
+    result.data['action']['success'] as bool;
+
+              `
+              }}
+            />
+          </pre>
+        </span>
       </div>
     </div>
   );
