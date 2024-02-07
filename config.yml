@@ -57,11 +57,11 @@ info:
   description: Welcome to the Car IQ GraphQL API reference! This reference includes the complete set of GraphQL types, queries, mutations, and their parameters.
   version: 1.0.0
   x-htmlTitle: Your HTML page title here
-  termsOfService: "https://www.gocariq.com/terms-of-use/"
+  termsOfService: "https://www.cariqpay.com/terms-of-use/"
   contact:
     name: Car IQ Support
-    email: support@gocariq.com
-    url: https://www.gocariq.com/
+    email: support@cariqpay.com
+    url: https://www.cariqpay.com/
   license:
     name: Apache 2.0
     url: "https://www.apache.org/licenses/LICENSE-2.0.html"

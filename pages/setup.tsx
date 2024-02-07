@@ -53,11 +53,11 @@ export default function Setup() {
           input and output. For example, our development GraphQL service lies on
           this url:&nbsp;
           <a
-            href="https://api-gateway.dev.gocariq.com/"
+            href="https://api-gateway.dev.cariqpay.com/"
             target="_blank"
             className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
           >
-            https://api-gateway.dev.gocariq.com/
+            https://api-gateway.dev.cariqpay.com/
           </a>
           . If you would like to login to our platform and only need the access
           token, then you would use the following query and input schema.
@@ -171,7 +171,7 @@ export default function Setup() {
     }
   };
 
-  await fetch("https://api-gateway.dev.gocariq.com/", {
+  await fetch("https://api-gateway.dev.cariqpay.com/", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

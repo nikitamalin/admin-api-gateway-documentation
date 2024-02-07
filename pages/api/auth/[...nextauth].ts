@@ -20,7 +20,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     callbacks: {
       async signIn({ user, profile, account }) {
         if (user && user.email) {
-          const whiteList = ["@gocariq.com"];
+          const whiteList = ["@gocariq.com", "@cariqpay.com"];
           for (const domain of whiteList) {
             if (user.email.endsWith(domain)) {
               return true;
