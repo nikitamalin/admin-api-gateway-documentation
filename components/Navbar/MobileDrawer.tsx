@@ -3,35 +3,31 @@ import {
   DrawerContent,
   Divider,
   DrawerBody,
-  Spinner,
-} from '@chakra-ui/react'
+  Spinner
+} from "@chakra-ui/react";
 
-import Link from 'next/link'
+import Link from "next/link";
 
-import { useRouter } from 'next/router'
-import { signOut } from 'next-auth/react'
+import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
 
 interface MobileDrawerProps {
-  setIsNavOpen: (prev: boolean) => void
-  isNavOpen: boolean
+  setIsNavOpen: (prev: boolean) => void;
+  isNavOpen: boolean;
 }
 const linkStyles =
-  'outline-none text-center leading-[59px] font-normal font-arial '
+  "outline-none text-center leading-[59px] font-normal font-arial ";
 
 export default function MobileDrawer({
   setIsNavOpen,
-  isNavOpen,
+  isNavOpen
 }: MobileDrawerProps) {
-  const router = useRouter()
+  const router = useRouter();
 
-  let isAddStationNote
-  let isStationNotes = false
+  let isHome;
 
-  if (router.asPath === '/') {
-    isAddStationNote = true
-  }
-  if (router.asPath === '/station-notes') {
-    isStationNotes = true
+  if (router.asPath === "/") {
+    isHome = true;
   }
 
   return (
@@ -49,22 +45,15 @@ export default function MobileDrawer({
         <DrawerBody p={0} className="flex flex-col mt-[95px] gap-10">
           <Link
             href="/"
-            className={`${isAddStationNote && 'text-orange'} ${linkStyles}`}
+            className={`${isHome && "text-orange"} ${linkStyles}`}
             onClick={() => setIsNavOpen(false)}
           >
-            Add Station Note
-          </Link>
-          <Link
-            href="/station-notes"
-            className={`${isStationNotes && 'text-orange'} ${linkStyles}`}
-            onClick={() => setIsNavOpen(false)}
-          >
-            Station Notes
+            Home
           </Link>
 
           <button
             onClick={() => {
-              signOut({ callbackUrl: '/' })
+              signOut({ callbackUrl: "/" });
             }}
             className={`${linkStyles}`}
           >
@@ -73,5 +62,5 @@ export default function MobileDrawer({
         </DrawerBody>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }

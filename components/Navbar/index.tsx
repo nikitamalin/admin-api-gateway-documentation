@@ -22,13 +22,9 @@ export default function Navbar({ children }: Props) {
     return <LoadingSpinner />;
   }
 
-  let isAddStationNote;
   let isSetup = false;
   let isDocumentation = false;
 
-  if (router.asPath === "/") {
-    isAddStationNote = true;
-  }
   if (router.asPath === "/setup") {
     isSetup = true;
   }
