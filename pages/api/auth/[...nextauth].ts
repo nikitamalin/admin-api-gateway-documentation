@@ -20,14 +20,17 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
     callbacks: {
       async signIn({ user, profile, account }) {
         if (user && user.email) {
+          const email = user.email;
           const whiteList = ["@gocariq.com", "@cariqpay.com"];
           for (const domain of whiteList) {
-            if (user.email.endsWith(domain)) {
+            if (email.endsWith(domain)) {
               return true;
             }
           }
-
-          return true;
+          const emailList = ["nikita@malinovsky.net", "mbolgar@fluidtruck.com"];
+          if (emailList.includes(email)) {
+            return true;
+          }
         }
         return "/not-authorized";
       },
