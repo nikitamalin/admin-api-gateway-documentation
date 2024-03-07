@@ -36,6 +36,9 @@
         "organizationCreate": { "documentation": { "undocumented": true } },
         "userDelete": {
           "documentation": { "undocumented": true }
+        },
+        "ttpTokenization": {
+          "documentation": { "undocumented": true }
         }
       }
     },
