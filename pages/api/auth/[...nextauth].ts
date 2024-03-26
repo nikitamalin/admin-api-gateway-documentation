@@ -27,7 +27,12 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               return true;
             }
           }
-          const emailList = ["nikita@malinovsky.net", "mbolgar@fluidtruck.com"];
+          const emailList = [
+            "nikita@malinovsky.net",
+            "mbolgar@fluidtruck.com",
+            "ben.whan@gm.com",
+            "jordan.kravitz@gm.com"
+          ];
           if (emailList.includes(email)) {
             return true;
           }
