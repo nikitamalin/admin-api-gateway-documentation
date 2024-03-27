@@ -31,7 +31,10 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             "nikita@malinovsky.net",
             "mbolgar@fluidtruck.com",
             "ben.whan@gm.com",
-            "jordan.kravitz@gm.com"
+            "jordan.kravitz@gm.com",
+            "ben.whan@gm.com",
+            "jordan.kravitz@gm.com",
+            "mihai.moldoveanu@gm.com"
           ];
           if (emailList.includes(email)) {
             return true;
