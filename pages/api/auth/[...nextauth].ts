@@ -15,9 +15,9 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
       async signIn({ user, profile, account }) {
         if (user && user.email) {
           const email = user.email;
-
+          console.log("EM: ", email);
           // Domain check
-          const domain = email.split("@")[-1];
+          const domain = email.split("@").pop();
           console.log("DO: ", domain);
           const domainExists = await axios.get(
             "https://api-spec.vercel.app/api/domains/get-value",
@@ -25,7 +25,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
               params: { domain: domain }
             }
           );
-          console.log("DD: ", domainExists);
           if (domainExists.data.isAllowed) {
             return true;
           }
@@ -39,23 +38,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           );
           console.log("EE: ", emailExists);
           if (emailExists.data.isAllowed) {
-            return true;
-          }
-
-          const whiteList = ["@gocariq.com", "@cariqpay.com"];
-          for (const domain of whiteList) {
-            if (email.endsWith(domain)) {
-              return true;
-            }
-          }
-          const emailList = [
-            "nikita@malinovsky.net",
-            "mbolgar@fluidtruck.com",
-            "ben.whan@gm.com",
-            "jordan.kravitz@gm.com",
-            "mihai.moldoveanu@gm.com"
-          ];
-          if (emailList.includes(email)) {
             return true;
           }
         }
