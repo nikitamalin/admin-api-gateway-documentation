@@ -13,7 +13,7 @@ export default function Unauthenticated() {
         <button
           onClick={() => {
             setIsSignInLoading(true);
-            signIn("auth0", { callbackUrl: "/" }, { prompt: "login" }).then(
+            signIn("google", { callbackUrl: "/" }, { prompt: "login" }).then(
               () => {
                 setIsSignInLoading(false);
               }

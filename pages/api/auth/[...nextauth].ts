@@ -1,26 +1,31 @@
 import NextAuth from "next-auth";
 import { NextApiRequest, NextApiResponse } from "next";
-import Auth0Provider from "next-auth/providers/auth0";
-
-const {
-  AUTH0_CLIENT_ID = "",
-  AUTH0_CLIENT_SECRET = "",
-  AUTH0_ISSUER_BASE_URL = ""
-} = process.env;
+import GoogleProvider from "next-auth/providers/google";
+import axios from "axios";
 
 export default async function auth(req: NextApiRequest, res: NextApiResponse) {
   return await NextAuth(req, res, {
     providers: [
-      Auth0Provider({
-        clientId: AUTH0_CLIENT_ID,
-        clientSecret: AUTH0_CLIENT_SECRET,
-        issuer: AUTH0_ISSUER_BASE_URL
+      GoogleProvider({
+        clientId: process.env.GOOGLE_CLIENT_ID as string,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
       })
     ],
     callbacks: {
       async signIn({ user, profile, account }) {
         if (user && user.email) {
           const email = user.email;
+
+          // const domain = email.split("@")[-1];
+
+          // const domainExists = await axios.get("/api/domains/get-value", {
+          //   params: { domain: domain }
+          // });
+          // console.log("DD: ", domainExists);
+          // if (domainExists) {
+          //   return true;
+          // }
+
           const whiteList = ["@gocariq.com", "@cariqpay.com"];
           for (const domain of whiteList) {
             if (email.endsWith(domain)) {
@@ -30,8 +35,6 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           const emailList = [
             "nikita@malinovsky.net",
             "mbolgar@fluidtruck.com",
-            "ben.whan@gm.com",
-            "jordan.kravitz@gm.com",
             "ben.whan@gm.com",
             "jordan.kravitz@gm.com",
             "mihai.moldoveanu@gm.com"

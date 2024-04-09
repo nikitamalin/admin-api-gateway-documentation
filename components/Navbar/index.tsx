@@ -1,13 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode, useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { signIn, signOut } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useSession } from "next-auth/react";
-import { Spinner } from "@chakra-ui/react";
+
 import LoadingSpinner from "../Auth/LoadingSpinner";
 import MobileMenu from "./MobileMenu";
-import Unauthenticated from "../Auth/Unauthenticated";
+
+import { isValidToken } from "@/utils/auth";
 interface Props {
   children?: ReactNode;
 }
@@ -16,7 +17,24 @@ export default function Navbar({ children }: Props) {
   const { data: session, status } = useSession();
   const [isSignInLoading, setIsSignInLoading] = useState(false);
   const [isSignOutLoading, setIsSignOutLoading] = useState(false);
+
+  const [email, setEmail] = useState<string | null>(null);
+  const [idToken, setIdToken] = useState<string | null>(null);
+
   const router = useRouter();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      if (session && session.user && session.user.email) {
+        setEmail(session.user.email);
+      }
+      if (session && session.idToken) {
+        setIdToken(session.idToken);
+      }
+    };
+
+    fetchSession();
+  }, [session]);
 
   if (status === "loading") {
     return <LoadingSpinner />;
@@ -31,6 +49,12 @@ export default function Navbar({ children }: Props) {
 
   if (router.asPath === "/documentation") {
     isDocumentation = true;
+  }
+
+  if (email && idToken) {
+    if (!isValidToken(email, idToken)) {
+      signOut({ callbackUrl: "/" });
+    }
   }
 
   return (
