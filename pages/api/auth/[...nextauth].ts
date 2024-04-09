@@ -16,16 +16,29 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         if (user && user.email) {
           const email = user.email;
 
+          // Domain check
           const domain = email.split("@")[-1];
-
+          console.log("DO: ", domain);
           const domainExists = await axios.get(
-            "https://api-spec.vercel.app//api/domains/get-value",
+            "https://api-spec.vercel.app/api/domains/get-value",
             {
               params: { domain: domain }
             }
           );
           console.log("DD: ", domainExists);
-          if (domainExists) {
+          if (domainExists.data.isAllowed) {
+            return true;
+          }
+
+          // Email Check
+          const emailExists = await axios.get(
+            "https://api-spec.vercel.app/api/emails/get-value",
+            {
+              params: { email: email }
+            }
+          );
+          console.log("EE: ", emailExists);
+          if (emailExists.data.isAllowed) {
             return true;
           }
 

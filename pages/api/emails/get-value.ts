@@ -4,21 +4,19 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { z, ZodError } from "zod";
 
 const schema = z.object({
-  email: z.string().email(),
-  idToken: z.string(),
-  value: z.string()
+  email: z.string().email()
 });
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { email, idToken, value } = schema.parse(JSON.parse(req.body));
+  const { email } = schema.parse(req.query);
 
-  if (!isValidToken(email, idToken)) {
-    return res.status(405).json({ message: "Invalid token" });
+  const isInSet = await kv.sismember("emailWhiteList", email);
+  let isAllowed = false;
+  if (isInSet === 1) {
+    isAllowed = true;
   }
-
-  const isInSet = await kv.sismember("emailWhiteList", value);
-  return res.status(200).json({ isAllowed: isInSet });
+  return res.status(200).json({ isAllowed: isAllowed });
 }
