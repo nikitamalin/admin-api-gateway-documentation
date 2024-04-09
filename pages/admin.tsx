@@ -180,7 +180,7 @@ export default function Admin() {
         <span>Add domain: </span>{" "}
         <input
           type="text"
-          placeholder="@example.com"
+          placeholder="example.com"
           value={addedDomain}
           required
           onChange={(event) => {
