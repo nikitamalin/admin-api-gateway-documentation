@@ -16,15 +16,18 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
         if (user && user.email) {
           const email = user.email;
 
-          // const domain = email.split("@")[-1];
+          const domain = email.split("@")[-1];
 
-          // const domainExists = await axios.get("/api/domains/get-value", {
-          //   params: { domain: domain }
-          // });
-          // console.log("DD: ", domainExists);
-          // if (domainExists) {
-          //   return true;
-          // }
+          const domainExists = await axios.get(
+            "https://api-spec.vercel.app//api/domains/get-value",
+            {
+              params: { domain: domain }
+            }
+          );
+          console.log("DD: ", domainExists);
+          if (domainExists) {
+            return true;
+          }
 
           const whiteList = ["@gocariq.com", "@cariqpay.com"];
           for (const domain of whiteList) {

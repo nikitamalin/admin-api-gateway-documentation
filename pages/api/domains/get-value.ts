@@ -11,7 +11,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { domain } = schema.parse(JSON.parse(req.body));
+  const { domain } = schema.parse(req.query);
 
   const isInSet = await kv.sismember("domainWhiteList", domain);
   return res.status(200).json({ isAllowed: isInSet });
