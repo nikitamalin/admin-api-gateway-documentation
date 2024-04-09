@@ -63,7 +63,12 @@ export default function MainLayout({ children }: Props) {
         <LoadingSpinner />
       ) : (
         <>
-          {status === "unauthenticated" ? <Unauthenticated /> : <>{children}</>}
+          {status === "unauthenticated" &&
+          router.pathname !== "/not-authorized" ? (
+            <Unauthenticated />
+          ) : (
+            <>{children}</>
+          )}
         </>
       )}
     </div>
