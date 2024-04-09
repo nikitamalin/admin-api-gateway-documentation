@@ -14,5 +14,9 @@ export default async function handler(
   const { domain } = schema.parse(req.query);
 
   const isInSet = await kv.sismember("domainWhiteList", domain);
-  return res.status(200).json({ isAllowed: isInSet });
+  let isAllowed = false;
+  if (isInSet === 1) {
+    isAllowed = true;
+  }
+  return res.status(200).json({ isAllowed: isAllowed });
 }
