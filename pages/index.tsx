@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { useIframeContext } from "@/components/Context/iframe";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const headingText = "text-2xl mt-5 font-medium";
@@ -20,10 +21,55 @@ export default function Home() {
 
   const linkClass = "cursor-pointer hover:text-orange mr-auto";
 
+  const handleDownload = async () => {
+    const res = await fetch("/api/protectedDumpFile");
+    const blob = await res.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "CarIQAPI.json";
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  };
+
   return (
     <div className="flex flex-col max-w-[800px] w-[80vw] my-10 mx-auto ">
       <h1 className="mx-auto text-4xl">Car IQ Documentation</h1>
       <div className={`${subText} flex flex-col`}>
+        <h2 className="mt-10 text-xl">Get started with Insomnia!</h2>
+        <div className="ml-6 mt-2 flex flex-col">
+          <span>
+            1.&nbsp;
+            <Link
+              href="https://insomnia.rest/download"
+              target="_blank"
+              className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+            >
+              Download Insomnia
+            </Link>
+          </span>
+          <span>
+            2.&nbsp;
+            <button
+              onClick={handleDownload}
+              className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+            >
+              Download Car IQ API Dump File
+            </button>
+          </span>
+          <span>
+            3.&nbsp;
+            <Link
+              href="https://www.loom.com/share/5c588a379557438e964556131cc4d029"
+              target="_blank"
+              className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+            >
+              Watch Walkthrough Video
+            </Link>
+          </span>
+        </div>
         <span className="mt-10 ">
           Check out the&nbsp;
           <Link
@@ -34,8 +80,8 @@ export default function Home() {
           </Link>
         </span>
         <span className="mt-5">
-          Click any of the following queries/mutations to get their fields and
-          types.
+          Click any of the following queries/mutations to explore their fields
+          and types.
         </span>
         <h2 className={`${headingText}`}>Authentication</h2>
         <div className={`${subHeading}`}>
