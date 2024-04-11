@@ -70,7 +70,7 @@ export default function Home() {
             </Link>
           </span>
         </div>
-        <span className="mt-10 ">
+        <span className="mt-5 ">
           Check out the&nbsp;
           <Link
             href="/setup"
