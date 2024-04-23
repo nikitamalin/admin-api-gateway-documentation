@@ -1,12 +1,16 @@
 FROM node:lts
-RUN mkdir /app
-COPY package.json /app/
+
 WORKDIR /app
-COPY . ./
 
-RUN npm install 
+COPY . /app/
 
-RUN npm run build
+RUN npm install \
+    && npm run build \
+    && addgroup --gid 1001 app \
+    && adduser --home /app --uid 1001 --ingroup app --shell /bin/sh --disabled-password --gecos app app \
+    && chown -R app:app /app
+
+USER app:app
 
 EXPOSE 3000
 
