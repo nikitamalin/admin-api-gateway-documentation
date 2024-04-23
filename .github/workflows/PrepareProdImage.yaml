@@ -1,0 +1,17 @@
+name: "Prepare PROD Image"
+permissions: write-all
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  PrepareProdImage:
+    uses: gocariq/custom-actions/.github/workflows/PrepareProdImage.yaml@v2
+    secrets:
+      inherit
