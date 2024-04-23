@@ -1,0 +1,26 @@
+name: "Build And Deploy"
+run-name: "Build And Deploy [env: ${{ inputs.deploy_env && inputs.deploy_env || 'stage' }}]${{ inputs.dry_run && ' [DRY RUN]' || '' }}"
+permissions: write-all
+
+on:
+  push:
+    branches:
+      - release-candidate
+  workflow_dispatch:
+    inputs:
+      deploy_env:
+        type: choice
+        description: Select the environment
+        options:
+          - stage
+
+jobs:
+  BuildAndDeploy:
+    uses: gocariq/custom-actions/.github/workflows/BuildAndDeploy.yaml@v2
+    with:
+      deploy_env: "${{ github.event.inputs.deploy_env }}"
+      docker_build_kit: 1
+      docker_params_token_on_build: "true"
+      deploy_env_on_push: "stage"
+    secrets:
+      inherit
