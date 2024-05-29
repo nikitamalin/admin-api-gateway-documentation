@@ -49,6 +49,7 @@
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.5",
-    "@types/mime": "^3.0.4"
+    "@types/mime": "^3.0.4",
+    "@types/mixpanel-browser": "^2.49.0"
   }
 }
