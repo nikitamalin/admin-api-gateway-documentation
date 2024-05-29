@@ -2,7 +2,8 @@ import React from "react";
 import Link from "next/link";
 import { useIframeContext } from "@/components/Context/iframe";
 import { useState, useEffect } from "react";
-
+import mixpanel from "mixpanel-browser";
+import { useSession } from "next-auth/react";
 export default function Home() {
   const headingText = "text-2xl mt-5 font-medium";
   const subHeadingText = "text-xl font-medium";
@@ -13,13 +14,41 @@ export default function Home() {
   const subSubSubheading = "indent-16";
   const bulletSubSubSubHeading = "indent-16 text-sm";
 
+  const { data: session } = useSession();
+  const [email, setEmail] = useState("");
+
   let setUrl = useIframeContext().setUrl;
 
   function setTheURL(url: string) {
     setUrl("api/protectedPage?anchor=#" + url);
+    mixpanel.init("e8d932180ae57787b3c2fd743194abdb");
+    mixpanel.track("API function view", {
+      anchor: url,
+      email: email
+    });
   }
 
   const linkClass = "cursor-pointer hover:text-orange mr-auto";
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      if (session && session.user && session.user.email) {
+        setEmail(session.user.email);
+      }
+    };
+
+    fetchSession();
+  }, [session]);
+
+  useEffect(() => {
+    if (email) {
+      mixpanel.init("e8d932180ae57787b3c2fd743194abdb");
+      mixpanel.track("Page View", {
+        pageName: "Home Page",
+        email: email
+      });
+    }
+  }, [email]);
 
   const handleDownload = async () => {
     const res = await fetch("/api/protectedDumpFile");
