@@ -1,5 +1,5 @@
 {
-  "name": "fab4",
+  "name": "Car IQ API Documentation",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -35,7 +35,7 @@
     "graphql": "^16.8.1",
     "jsonwebtoken": "^9.0.2",
     "mime": "^3.0.0",
-    "mixpanel-browser": "^2.50.0",
+    "mixpanel-browser": "^2.52.0",
     "next": "13.4.16",
     "next-auth": "^4.23.1",
     "postcss": "8.4.28",

@@ -11,6 +11,7 @@ export function IframeContextWrapper({
   children: React.ReactNode;
 }) {
   const [url, setUrl] = useState("api/protectedPage");
+
   return (
     <IframeContext.Provider value={{ url, setUrl }}>
       {children}
