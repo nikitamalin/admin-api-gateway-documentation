@@ -19,19 +19,22 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
           // Domain check
           const domain = email.split("@").pop();
           console.log("DO: ", domain);
+
           const domainExists = await axios.get(
-            "https://api-spec.vercel.app/api/domains/get-value",
+            `https://apidocs.stage.gocariq.com/api/domains/get-value`,
             {
               params: { domain: domain }
             }
           );
+
+          console.log(domainExists);
           if (domainExists.data.isAllowed) {
             return true;
           }
 
           // Email Check
           const emailExists = await axios.get(
-            "https://api-spec.vercel.app/api/emails/get-value",
+            `https://apidocs.stage.gocariq.com/api/emails/get-value`,
             {
               params: { email: email }
             }
@@ -41,6 +44,7 @@ export default async function auth(req: NextApiRequest, res: NextApiResponse) {
             return true;
           }
         }
+        console.log("NOTTTT");
         return "/not-authorized";
       },
       async session({ session, token, user }) {

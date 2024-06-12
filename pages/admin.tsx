@@ -8,7 +8,11 @@ import useSwr from "swr";
 import { Tooltip } from "@chakra-ui/react";
 
 function allowedEmail(email: string) {
-  const emailList = ["nikita@cariqpay.com", "matt@cariqpay.com"];
+  const emailList = [
+    "nikita@cariqpay.com",
+    "matt@cariqpay.com",
+    "christian@cariqpay.com"
+  ];
   if (emailList.includes(email)) {
     return true;
   }
