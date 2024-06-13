@@ -6,41 +6,27 @@ export default function Setup() {
   const headingText = "text-2xl mt-5 font-medium";
   const subHeadingText = "text-xl font-medium";
   const subText = "text-lg";
-  const linkClass = "cursor-pointer hover:text-orange mr-auto";
+
+  const linkClass = "cursor-pointer underline mr-auto";
 
   return (
     <div className="flex flex-col max-w-[800px] w-[80vw] my-10 mx-auto ">
       <h1 className="mx-auto text-4xl">Setup for Car IQ Documentation</h1>
       <div className={`${subText} flex flex-col mt-5`}>
         <div className="flex flex-col gap-1">
-          <Link
-            href="/setup#intro"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
-          >
+          <Link href="/setup#intro" className={`${linkClass}`}>
             Introduction
           </Link>
-          <Link
-            href="/setup#javascript"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
-          >
+          <Link href="/setup#javascript" className={`${linkClass}`}>
             Javascript/Node.js
           </Link>
-          <Link
-            href="/setup#java"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
-          >
+          <Link href="/setup#java" className={`${linkClass}`}>
             Java/Kotlin
           </Link>
-          <Link
-            href="/setup#swift"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
-          >
+          <Link href="/setup#swift" className={`${linkClass}`}>
             Swift
           </Link>
-          <Link
-            href="/setup#flutter"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
-          >
+          <Link href="/setup#flutter" className={`${linkClass}`}>
             Flutter
           </Link>
         </div>
@@ -55,7 +41,7 @@ export default function Setup() {
           <a
             href="https://api-gateway.dev.cariqpay.com/"
             target="_blank"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+            className={`${linkClass}`}
           >
             https://api-gateway.dev.cariqpay.com/
           </a>
@@ -134,7 +120,7 @@ export default function Setup() {
           <a
             href="https://www.apollographql.com/docs/react/get-started"
             target="_blank"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+            className={`${linkClass}`}
           >
             <pre>
               <code>@apollo/client</code>
@@ -193,7 +179,7 @@ export default function Setup() {
           <a
             href="https://www.apollographql.com/docs/kotlin"
             target="_blank"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+            className={`${linkClass}`}
           >
             Apollo Kotlin
           </a>
@@ -249,7 +235,7 @@ export default function Setup() {
           <a
             href="https://www.apollographql.com/docs/ios"
             target="_blank"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+            className={`${linkClass}`}
           >
             Apollo IOS
           </a>
@@ -305,7 +291,7 @@ export default function Setup() {
           <a
             href="https://pub.dev/packages/graphql"
             target="_blank"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:pb-[1px] hover:text-orangeHover cursor-pointer mr-auto"
+            className={`${linkClass}`}
           >
             graphql: ^5.1.3 dart library
           </a>

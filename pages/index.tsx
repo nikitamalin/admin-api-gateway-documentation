@@ -28,7 +28,7 @@ export default function Home() {
     });
   }
 
-  const linkClass = "cursor-pointer hover:text-orange mr-auto";
+  const linkClass = "cursor-pointer underline mr-auto";
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -74,7 +74,7 @@ export default function Home() {
             <Link
               href="https://insomnia.rest/download"
               target="_blank"
-              className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+              className="leading-6 underline cursor-pointer"
             >
               Download Insomnia
             </Link>
@@ -83,7 +83,7 @@ export default function Home() {
             2.&nbsp;
             <button
               onClick={handleDownload}
-              className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+              className="leading-6 underline cursor-pointer"
             >
               Download Car IQ API Dump File
             </button>
@@ -93,7 +93,7 @@ export default function Home() {
             <Link
               href="https://www.loom.com/share/5c588a379557438e964556131cc4d029"
               target="_blank"
-              className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
+              className="leading-6 underline cursor-pointer"
             >
               Watch Walkthrough Video
             </Link>
@@ -101,10 +101,7 @@ export default function Home() {
         </div>
         <span className="mt-5 ">
           Check out the&nbsp;
-          <Link
-            href="/setup"
-            className="text-orange border-b border-orange leading-6 hover:border-none hover:text-orangeHover cursor-pointer"
-          >
+          <Link href="/setup" className="leading-6 underline cursor-pointer">
             setup docs
           </Link>
         </span>
