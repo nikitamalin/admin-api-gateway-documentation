@@ -39,11 +39,11 @@ export default function Setup() {
           input and output. For example, our development GraphQL service lies on
           this url:&nbsp;
           <a
-            href="https://api-gateway.dev.cariqpay.com/"
+            href="https://admin--api-gateway.dev.cariqpay.com/"
             target="_blank"
             className={`${linkClass}`}
           >
-            https://api-gateway.dev.cariqpay.com/
+            https://admin--api-gateway.dev.cariqpay.com/
           </a>
           . If you would like to login to our platform and only need the access
           token, then you would use the following query and input schema.
