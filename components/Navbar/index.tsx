@@ -40,12 +40,7 @@ export default function Navbar({ children }: Props) {
     return <LoadingSpinner />;
   }
 
-  let isSetup = false;
   let isDocumentation = false;
-
-  if (router.asPath === "/setup") {
-    isSetup = true;
-  }
 
   if (router.asPath === "/documentation") {
     isDocumentation = true;
@@ -73,12 +68,6 @@ export default function Navbar({ children }: Props) {
             {status === "authenticated" && (
               <>
                 <div className="hidden ml:flex gap-5 ">
-                  <Link
-                    href="/setup"
-                    className={`link ${isSetup && "selected-link"}`}
-                  >
-                    Setup
-                  </Link>
                   <Link
                     href="/documentation"
                     className={`link ${isDocumentation && "selected-link"}`}
